@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 import anthropic
 
-ALPHA_VANTAGE_KEY = "your_alpha_vantage_key"
-ANTHROPIC_KEY = " your_anthropic_key"
+ALPHA_VANTAGE_KEY = st.secrets["ALPHA_VANTAGE_KEY"]
+ANTHROPIC_KEY = st.secrets["ANTHROPIC_KEY"]
 
 st.set_page_config(page_title="Clairo", page_icon="📈", layout="wide")
 

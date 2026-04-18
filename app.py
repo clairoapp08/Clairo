@@ -142,7 +142,7 @@ for i in range(5):
         stock_inputs.append(symbol.strip().upper())
 
 if not stock_inputs:
-    stock_inputs = ["AAPL", "TSLA", "NVDA", "GOOGL", "META"]
+    stock_inputs = []
 
 search_query = st.text_input("Search a stock", placeholder="e.g. AAPL, TSLA, GOOGL...")
 search_btn = st.button("Search")
@@ -205,7 +205,24 @@ if search_btn and search_query.strip():
     render_stock_card(search_query.strip().upper())
 
 st.markdown('<div class="section-label">Your Watchlist</div>', unsafe_allow_html=True)
-cols = st.columns(2)
-for i, symbol in enumerate(stock_inputs):
-    with cols[i % 2]:
-        render_stock_card(symbol)
+
+if not stock_inputs:
+    st.markdown("""
+    <div style="text-align: center; padding: 60px 20px;">
+        <div style="font-size: 48px; margin-bottom: 16px; color: #00c896;">↗</div>
+        <div style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Your watchlist is empty</div>
+        <div style="font-size: 14px; color: #555; margin-bottom: 24px;">Add up to 5 stocks in the sidebar to get started</div>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <span style="background: #0f0f0f; border: 1px solid #1a1a1a; color: #00c896; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;">AAPL</span>
+            <span style="background: #0f0f0f; border: 1px solid #1a1a1a; color: #00c896; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;">TSLA</span>
+            <span style="background: #0f0f0f; border: 1px solid #1a1a1a; color: #00c896; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;">NVDA</span>
+            <span style="background: #0f0f0f; border: 1px solid #1a1a1a; color: #00c896; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;">GOOGL</span>
+            <span style="background: #0f0f0f; border: 1px solid #1a1a1a; color: #00c896; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;">META</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+else:
+    cols = st.columns(2)
+    for i, symbol in enumerate(stock_inputs):
+        with cols[i % 2]:
+            render_stock_card(symbol)

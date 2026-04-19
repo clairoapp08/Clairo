@@ -1,6 +1,19 @@
 import os
 import json
 import requests
+
+NEWS_API_KEY = os.environ.get("NEWS_API_KEY", "6ff731d44dba4b7eb469b4d70f333f58")
+def get_news_headlines(symbol):
+    try:
+        url = f"https://newsapi.org/v2/everything?q={symbol}&language=en&sortBy=publishedAt&pageSize=3&apiKey={NEWS_API_KEY}"
+        response = requests.get(url, timeout=5)
+        data = response.json()
+        headlines = []
+        for article in data.get("articles", []):
+            headlines.append(article["title"])
+        return headlines
+    except:
+        return []
 import yfinance as yf
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
@@ -24,6 +37,10 @@ def get_stock_data(symbol):
 def get_ai_summary(symbol, price, change):
     try:
         direction = "up" if float(change) >= 0 else "down"
+        headlines = get_news_headlines(symbol)
+        news_context = ""
+        if headlines:
+            news_context = "Recent headlines: " + " | ".join(headlines[:3])
         headers = {
             "x-api-key": ANTHROPIC_KEY,
             "anthropic-version": "2023-06-01",
@@ -34,12 +51,14 @@ def get_ai_summary(symbol, price, change):
             "max_tokens": 150,
             "messages": [{
                 "role": "user",
-                "content": f"""You are a stock analyst writing for beginner investors. Write exactly 2 sentences about {symbol} stock. Today is April 18, 2026. The stock moved {direction} {abs(float(change))}% to ${price}.
+                "content": f"""You are a stock analyst writing short summaries for beginner investors. Write exactly 2 sentences about {symbol} stock. Today it moved {direction} {abs(float(change))}% to ${price}.
 
-Sentence 1: State what the stock did today and give one specific, real reason why (earnings, product news, sector move, macro event). Be direct and concrete — never say market sentiment or investor confidence. Never repeat the same reason for multiple stocks.
-Sentence 2: Name one specific thing to watch next — an upcoming product launch, regulatory decision, or key metric. Do NOT mention specific earnings dates unless you are 100% certain. Instead say things like next earnings report without a date, or focus on a product or business metric to watch.
+{news_context}
 
-No jargon. No markdown. No bullet points. Exactly 2 sentences. Never mention you are an AI."""
+Sentence 1: Based on the price movement and the news headlines provided, give a specific concrete reason for today's move. Reference the actual news if available.
+Sentence 2: Name one specific thing to watch for this stock based on current news and the company's business.
+
+No jargon. No markdown. No bullet points. Exactly 2 sentences. Never say you lack real-time data. Never refuse. Always write something useful. Never mention you are an AI."""
             }]
         }
         response = requests.post(
@@ -53,7 +72,6 @@ No jargon. No markdown. No bullet points. Exactly 2 sentences. Never mention you
     except Exception as e:
         print(f"AI error: {e}")
         return f"{symbol} moved {change}% today. Check financial news for the latest updates."
-
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)

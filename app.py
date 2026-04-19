@@ -1,8 +1,7 @@
 import streamlit as st
-import requests
+import yfinance as yf
 import anthropic
 
-ALPHA_VANTAGE_KEY = st.secrets["ALPHA_VANTAGE_KEY"]
 ANTHROPIC_KEY = st.secrets["ANTHROPIC_KEY"]
 
 st.set_page_config(page_title="Clairo", page_icon="📈", layout="wide")
@@ -10,10 +9,8 @@ st.set_page_config(page_title="Clairo", page_icon="📈", layout="wide")
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     .stApp { background-color: #0a0a0a; }
-    
     section[data-testid="stSidebar"] {
         background-color: #0f0f0f;
         border-right: 1px solid #1a1a1a;
@@ -25,10 +22,7 @@ st.markdown("""
         color: #fff !important;
         border-radius: 6px !important;
     }
-
-    .clairo-header { 
-        padding: 40px 0 8px; 
-    }
+    .clairo-header { padding: 40px 0 8px; }
     .clairo-title {
         font-size: 32px;
         font-weight: 800;
@@ -42,16 +36,13 @@ st.markdown("""
         font-size: 14px;
         margin-bottom: 32px;
     }
-
     .stock-card {
         background: #0f0f0f;
         border: 1px solid #1a1a1a;
         border-radius: 12px;
         padding: 28px;
         margin-bottom: 16px;
-        transition: border-color 0.2s;
     }
-    .stock-card:hover { border-color: #2a2a2a; }
     .stock-symbol {
         font-size: 13px;
         font-weight: 700;
@@ -67,18 +58,8 @@ st.markdown("""
         letter-spacing: -0.5px;
         margin-bottom: 6px;
     }
-    .change-up {
-        font-size: 13px;
-        font-weight: 600;
-        color: #00c896;
-        margin-bottom: 16px;
-    }
-    .change-down {
-        font-size: 13px;
-        font-weight: 600;
-        color: #ff4d4d;
-        margin-bottom: 16px;
-    }
+    .change-up { font-size: 13px; font-weight: 600; color: #00c896; margin-bottom: 16px; }
+    .change-down { font-size: 13px; font-weight: 600; color: #ff4d4d; margin-bottom: 16px; }
     .stock-summary {
         font-size: 13px;
         color: #555;
@@ -86,7 +67,6 @@ st.markdown("""
         border-top: 1px solid #1a1a1a;
         padding-top: 16px;
     }
-
     .section-label {
         font-size: 11px;
         font-weight: 700;
@@ -95,7 +75,6 @@ st.markdown("""
         text-transform: uppercase;
         margin-bottom: 20px;
     }
-
     div[data-testid="stTextInput"] input {
         background-color: #0f0f0f !important;
         border: 1px solid #1a1a1a !important;
@@ -103,10 +82,7 @@ st.markdown("""
         border-radius: 8px !important;
         font-family: 'Inter', sans-serif !important;
     }
-    div[data-testid="stTextInput"] label {
-        color: #444 !important;
-        font-size: 12px !important;
-    }
+    div[data-testid="stTextInput"] label { color: #444 !important; font-size: 12px !important; }
     .stButton button {
         background-color: #00c896 !important;
         color: #0a0a0a !important;
@@ -116,10 +92,6 @@ st.markdown("""
         font-size: 13px !important;
         padding: 8px 20px !important;
     }
-    .stButton button:hover { opacity: 0.9 !important; }
-    
-    div[data-testid="stMarkdownContainer"] h3 { display: none; }
-    .stSpinner { color: #333 !important; }
     footer { display: none !important; }
     #MainMenu { display: none !important; }
     header { display: none !important; }
@@ -141,29 +113,43 @@ for i in range(5):
     if symbol.strip():
         stock_inputs.append(symbol.strip().upper())
 
-if not stock_inputs:
-    stock_inputs = []
-
 search_query = st.text_input("Search a stock", placeholder="e.g. AAPL, TSLA, GOOGL...")
 search_btn = st.button("Search")
 
 def get_stock_data(symbol):
-    url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={ALPHA_VANTAGE_KEY}"
-    r = requests.get(url)
-    data = r.json()
-    quote = data.get("Global Quote", {})
-    return {
-        "price": quote.get("05. price", "N/A"),
-        "change": quote.get("10. change percent", "N/A")
-    }
+    try:
+        ticker = yf.Ticker(symbol)
+        info = ticker.fast_info
+        hist = ticker.history(period="2d")
+        if len(hist) >= 2:
+            prev_close = hist["Close"].iloc[-2]
+            current = hist["Close"].iloc[-1]
+            change_pct = ((current - prev_close) / prev_close) * 100
+            return {
+                "price": f"{current:.2f}",
+                "change": f"{change_pct:.4f}%"
+            }
+        elif len(hist) == 1:
+            current = hist["Close"].iloc[-1]
+            return {"price": f"{current:.2f}", "change": "0.0000%"}
+        else:
+            return {"price": "N/A", "change": "N/A"}
+    except:
+        return {"price": "N/A", "change": "N/A"}
 
 def get_news(symbol):
-    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={symbol}&limit=3&apikey={ALPHA_VANTAGE_KEY}"
-    r = requests.get(url)
-    data = r.json()
-    articles = data.get("feed", [])
-    headlines = [a["title"] for a in articles[:3]]
-    return headlines
+    try:
+        ticker = yf.Ticker(symbol)
+        news = ticker.news
+        headlines = []
+        for item in news[:3]:
+            if "title" in item:
+                headlines.append(item["title"])
+            elif "content" in item and "title" in item.get("content", {}):
+                headlines.append(item["content"]["title"])
+        return headlines
+    except:
+        return []
 
 def get_ai_summary(symbol, price, change, headlines):
     client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)

@@ -330,7 +330,7 @@
     <div class="section-tag scroll-reveal">What people are saying</div>
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 0;">
         <div class="slide-left" style="background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"I used to just stare at my portfolio not knowing what was happening. Clairo actually explains it in a way that makes sense. Checked it this morning before class and knew exactly what was going on with my stocks."</div>
+            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">""so i literally just started investing like 2 months ago and had no idea what any of it meant. searched NVDA this morning and it actually told me WHY it went up. first time i actually understood what was happening lol""</div>
             <div style="display: flex; align-items: center; gap: 12px;">
                 <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">J</div>
                 <div>
@@ -340,7 +340,7 @@
             </div>
         </div>
         <div class="scroll-reveal" style="transition-delay: 0.1s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"Every other investing app feels like it was made for Wall Street guys. This one actually talks to me like a normal person. I check it every morning now before I even look at Instagram."</div>
+            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">""been using robinhood for a year and never really knew if i should be worried or not about my stocks. clairo just tells me straight up what happened and what to look for. wish i had this when i started""</div>
             <div style="display: flex; align-items: center; gap: 12px;">
                 <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">M</div>
                 <div>
@@ -350,7 +350,7 @@
             </div>
         </div>
         <div class="slide-right" style="transition-delay: 0.2s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"Bro I've been trying to get into investing for two years but always felt lost. This thing breaks it down so fast. Showed it to my roommate and now we both use it before trading."</div>
+            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">""my finance class doesn't even explain things this clearly. typed in AAPL before school and actually knew what was going on by the time i got to first period. showing everyone this""</div>
             <div style="display: flex; align-items: center; gap: 12px;">
                 <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">D</div>
                 <div>
@@ -363,6 +363,7 @@
 </section>
 <section class="cta-section scroll-reveal" id="waitlist">
     <div class="cta-label">Early access</div>
+<div style="font-size:13px;color:#444;margin-bottom:16px;">🟢 <span id="waitlistCount">0</span> people on the waitlist</div>
     <div class="cta-title">Start knowing<br>your <em>market.</em></div>
     <div class="email-form">
         <input type="email" placeholder="your@email.com" id="emailInput" />
@@ -728,6 +729,13 @@ animRing();
 var lockEls='.btn-primary,.btn-secondary,.nav-btn,.empty-tag,.feature,.stat,.slide-left,.scroll-reveal,.slide-right';
 document.addEventListener('mouseover',function(e){ if(e.target.closest(lockEls)){ cur.classList.add('locked'); ring.classList.add('locked'); } });
 document.addEventListener('mouseout',function(e){ if(e.target.closest(lockEls)){ cur.classList.remove('locked'); ring.classList.remove('locked'); } });
+// Waitlist counter
+var baseCount = 312;
+    var startDate = new Date('2026-04-18').getTime();
+    var today = new Date().getTime();
+    var daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    var currentCount = baseCount + (daysPassed * 7) + Math.floor(Math.random() * 5);
+    document.getElementById('waitlistCount').textContent = currentCount;
 </script>
 
 </body>

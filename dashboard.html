@@ -16,7 +16,7 @@
             background: #00c896;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999999;
             transform: translate(-50%, -50%);
             transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
             box-shadow: 0 0 8px rgba(0,200,150,0.6);
@@ -27,7 +27,7 @@
             border: 1px solid rgba(0,200,150,0.4);
             border-radius: 50%;
             pointer-events: none;
-            z-index: 9998;
+            z-index: 999998;
             transform: translate(-50%, -50%);
             transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, transform 0.08s ease;
         }
@@ -132,7 +132,20 @@
     </style>
 </head>
 <body>
-
+    <div id="upgradeModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;">
+        <div style="background:#0f0f0f;border:1px solid #1a1a1a;border-radius:12px;padding:40px;max-width:420px;width:90%;text-align:center;">
+            <div style="font-size:11px;color:#00c896;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">Free Limit Reached</div>
+            <div style="font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:12px;">Upgrade to Pro</div>
+            <div style="font-size:13px;color:#444;line-height:1.7;margin-bottom:32px;">You've used your 5 free daily searches. Upgrade to Clairo Pro for unlimited searches, daily briefings, and more.</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <input id="upgradeEmail" type="email" placeholder="your@email.com" style="background:#080808;border:1px solid #1a1a1a;color:#fff;padding:12px 16px;border-radius:6px;font-size:13px;outline:none;font-family:Inter,sans-serif;text-align:center;" />
+                <button onclick="submitUpgradeEmail()" style="background:#00c896;color:#080808;border:none;padding:14px;border-radius:6px;font-size:12px;font-weight:700;cursor:none;font-family:Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;">Notify Me When Pro Launches</button>
+                <button onclick="closeUpgradeModal()" style="background:transparent;color:#333;border:1px solid #1a1a1a;padding:12px;border-radius:6px;font-size:11px;cursor:none;font-family:Inter,sans-serif;">Maybe later</button>
+            </div>
+            <div id="upgradeSuccess" style="display:none;color:#00c896;font-size:12px;margin-top:12px;">You're on the list. We'll email you when Pro launches.</div>
+            <div style="font-size:10px;color:#222;margin-top:16px;">Resets daily · No card required for free tier</div>
+        </div>
+    </div>
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 
@@ -243,27 +256,27 @@
     <div class="view" id="view-market">
         <canvas class="view-bg" id="marketBg"></canvas>
         <div class="content">
-            <div class="section-label">Market Overview</div>
+            <div class="section-label">Market Overview — <span style="color:#00c896;font-size:9px" id="marketTime">Loading...</span></div>
             <div class="market-grid">
-                <div class="market-card">
-                    <div class="market-name">S&P 500</div>
-                    <div class="market-val">5,218.19</div>
-                    <div class="market-up">▲ 0.87%</div>
+                <div class="market-card" id="spyCard">
+                    <div class="market-name">S&P 500 · SPY</div>
+                    <div class="market-val" id="spyPrice"><div class="skeleton" style="width:100px;height:22px"></div></div>
+                    <div id="spyChange"><div class="skeleton" style="width:60px;height:12px;margin-top:4px"></div></div>
                 </div>
-                <div class="market-card">
-                    <div class="market-name">NASDAQ</div>
-                    <div class="market-val">16,274.94</div>
-                    <div class="market-up">▲ 1.24%</div>
+                <div class="market-card" id="qqqCard">
+                    <div class="market-name">NASDAQ · QQQ</div>
+                    <div class="market-val" id="qqqPrice"><div class="skeleton" style="width:100px;height:22px"></div></div>
+                    <div id="qqqChange"><div class="skeleton" style="width:60px;height:12px;margin-top:4px"></div></div>
                 </div>
-                <div class="market-card">
-                    <div class="market-name">DOW JONES</div>
-                    <div class="market-val">38,996.39</div>
-                    <div class="market-down">▼ 0.12%</div>
+                <div class="market-card" id="diaCard">
+                    <div class="market-name">DOW JONES · DIA</div>
+                    <div class="market-val" id="diaPrice"><div class="skeleton" style="width:100px;height:22px"></div></div>
+                    <div id="diaChange"><div class="skeleton" style="width:60px;height:12px;margin-top:4px"></div></div>
                 </div>
             </div>
             <div class="briefing-box">
                 <div class="briefing-label">Today's Briefing</div>
-                <div class="briefing-text">Markets closed mixed today with the S&P 500 and NASDAQ advancing while the Dow dipped slightly. Tech stocks led gains driven by continued momentum and strong earnings expectations. Investors remain cautious ahead of upcoming Fed commentary on interest rates. For beginners — a mixed day like this is completely normal. Keep watching earnings reports and Fed news as the key drivers this week.</div>
+                <div class="briefing-text" id="briefingText"><div class="skeleton" style="width:100%;margin-bottom:6px"></div><div class="skeleton" style="width:90%;margin-bottom:6px"></div><div class="skeleton" style="width:80%"></div></div>
             </div>
         </div>
     </div>
@@ -292,7 +305,7 @@
     animateRing();
 
     // Lock cursor on interactive elements
-    var lockTargets='.stock-card,.empty-tag,.nav-item,.ticker-item,.update-btn,.search-btn,.market-card';
+    var lockTargets='.stock-card,.empty-tag,.nav-item,.ticker-item,.update-btn,.search-btn,.market-card,#upgradeModal button,#upgradeEmail';
     document.addEventListener('mouseover',function(e){
         if(e.target.closest(lockTargets)){
             cur.classList.add('locked'); ring.classList.add('locked');
@@ -408,36 +421,128 @@
     // Market bg — bars
     var mC=document.getElementById('marketBg');
     var mX=mC.getContext('2d');
-    var bHeights=[],bTargets=[],nb=24;
     function resizeM(){mC.width=mC.parentElement.offsetWidth;mC.height=mC.parentElement.offsetHeight||500;}
     resizeM(); window.addEventListener('resize',resizeM);
     setInterval(function(){
     resizeTb(); resizeD(); resizeS(); resizeM();
 }, 500);
-    for(var i=0;i<nb;i++){bTargets.push(0.05+Math.random()*0.35);bHeights.push(0);}
-    setInterval(function(){for(var i=0;i<nb;i++)bTargets[i]=0.05+Math.random()*0.35;},2500);
-    function drawMkt(){
-        if(!document.getElementById('view-market').classList.contains('active')){requestAnimationFrame(drawMkt);return;}
-        var w=mC.width,h=mC.height;
-        mX.clearRect(0,0,w,h);
-        mX.strokeStyle='rgba(0,200,150,0.03)';mX.lineWidth=0.5;
-        for(var x=0;x<w;x+=60){mX.beginPath();mX.moveTo(x,0);mX.lineTo(x,h);mX.stroke();}
-        for(var y=0;y<h;y+=50){mX.beginPath();mX.moveTo(0,y);mX.lineTo(w,y);mX.stroke();}
-        var bw=Math.floor(w/nb);
-        for(var i=0;i<nb;i++){
-            bHeights[i]+=(bTargets[i]-bHeights[i])*0.025;
-            var bh=bHeights[i]*h*0.6;
-            var bx=i*bw+bw*0.15;
-            var g=mX.createLinearGradient(0,h-bh,0,h);
-            g.addColorStop(0,'rgba(0,200,150,0.25)');g.addColorStop(1,'rgba(0,200,150,0.01)');
-            mX.fillStyle=g;mX.fillRect(bx,h-bh,bw*0.7,bh);
-            mX.beginPath();mX.moveTo(bx,h-bh);mX.lineTo(bx+bw*0.7,h-bh);
-            mX.strokeStyle='rgba(0,200,150,0.4)';mX.lineWidth=1;mX.stroke();
-        }
-        requestAnimationFrame(drawMkt);
+    // Market bg — same scrolling multi-line chart as landing page
+var mktSpacing=6,mktScrollX=0;
+var mktHistLen=Math.ceil(2000/mktSpacing)+40;
+var mktSeries=[
+    {color:'#00c896',shadowColor:'rgba(0,200,150,0.6)',baseY:120,volatility:18,pts:[]},
+    {color:'#00e5ff',shadowColor:'rgba(0,229,255,0.4)',baseY:155,volatility:24,pts:[]},
+    {color:'rgba(255,255,255,0.35)',shadowColor:'rgba(255,255,255,0.2)',baseY:138,volatility:10,pts:[]}
+];
+mktSeries.forEach(function(s){
+    var y=s.baseY+60;
+    for(var i=0;i<mktHistLen;i++){
+        var noise=(Math.random()-0.4)*s.volatility;
+        y=Math.max(20,Math.min(195,y+noise));
+        s.pts.push(y);
     }
+});
+function addMktPoints(){
+    mktSeries.forEach(function(s){
+        var last=s.pts[s.pts.length-1];
+        var noise=(Math.random()-0.42)*s.volatility;
+        s.pts.push(Math.max(20,Math.min(195,last+noise)));
+        if(s.pts.length>mktHistLen+20)s.pts.shift();
+    });
+}
+function drawMkt(){
+    if(!document.getElementById('view-market').classList.contains('active')){requestAnimationFrame(drawMkt);return;}
+    var w=mC.width,h=mC.height;
+    mX.clearRect(0,0,w,h);
+    // Grid
+    mX.strokeStyle='rgba(0,200,150,0.04)';mX.lineWidth=0.5;
+    for(var x=0;x<w;x+=80){mX.beginPath();mX.moveTo(x,0);mX.lineTo(x,h-20);mX.stroke();}
+    for(var y=0;y<h-20;y+=40){mX.beginPath();mX.moveTo(0,y);mX.lineTo(w,y);mX.stroke();}
+    // Dashed price levels
+    [25,65,105,145,185].forEach(function(ly){
+        mX.strokeStyle='rgba(0,200,150,0.06)';mX.lineWidth=0.5;
+        mX.setLineDash([4,8]);mX.beginPath();mX.moveTo(0,ly);mX.lineTo(w,ly);mX.stroke();mX.setLineDash([]);
+    });
+    mktScrollX+=0.4;
+    if(mktScrollX>=mktSpacing){mktScrollX-=mktSpacing;addMktPoints();}
+    var numVis=Math.ceil(w/mktSpacing)+2;
+    mktSeries.forEach(function(s,si){
+        var visPts=s.pts.slice(-numVis);
+        var pX=[],pY=[];
+        for(var i=0;i<visPts.length;i++){pX.push(i*mktSpacing-mktScrollX);pY.push(visPts[i]);}
+        if(si===0){
+            mX.beginPath();mX.moveTo(pX[0],pY[0]);
+            for(var i=1;i<pX.length;i++)mX.lineTo(pX[i],pY[i]);
+            mX.lineTo(pX[pX.length-1],h-20);mX.lineTo(pX[0],h-20);mX.closePath();
+            var g=mX.createLinearGradient(0,0,0,h);
+            g.addColorStop(0,'rgba(0,200,150,0.1)');g.addColorStop(1,'rgba(0,200,150,0)');
+            mX.fillStyle=g;mX.fill();
+        }
+        mX.beginPath();mX.moveTo(pX[0],pY[0]);
+        for(var i=1;i<pX.length;i++)mX.lineTo(pX[i],pY[i]);
+        mX.strokeStyle=s.color;mX.lineWidth=si===0?2:1.5;
+        mX.shadowBlur=si===0?8:4;mX.shadowColor=s.shadowColor;
+        mX.stroke();mX.shadowBlur=0;
+        var ex=pX[pX.length-1],ey=pY[pY.length-1];
+        mX.beginPath();mX.arc(ex,ey,3,0,Math.PI*2);
+        mX.fillStyle=s.color;mX.shadowBlur=10;mX.shadowColor=s.shadowColor;
+        mX.fill();mX.shadowBlur=0;
+    });
+    // Baseline
+    mX.beginPath();mX.moveTo(0,h-20);mX.lineTo(w,h-20);
+    mX.strokeStyle='rgba(0,200,150,0.2)';mX.lineWidth=1;mX.stroke();
+    // Volume bars
+    var vol0=mktSeries[0].pts.slice(-numVis);
+    for(var i=0;i<vol0.length;i+=3){
+        var bx=i*mktSpacing-mktScrollX;
+        if(bx<0||bx>w)continue;
+        var bh=4+Math.random()*12;
+        mX.fillStyle='rgba(0,200,150,0.07)';
+        mX.fillRect(bx-3,h-20-bh,6,bh);
+    }
+    requestAnimationFrame(drawMkt);
+}
     drawMkt();
+    function loadMarketData(){
+        document.getElementById('marketTime').textContent='Updating...';
+        
+        // Load prices first fast
+        var spy = fetch('/api/stock?symbol=SPY').then(function(r){return r.json();});
+        var qqq = fetch('/api/stock?symbol=QQQ').then(function(r){return r.json();});
+        var dia = fetch('/api/stock?symbol=DIA').then(function(r){return r.json();});
+        
+        Promise.all([spy,qqq,dia]).then(function(results){
+            var now=new Date();
+            document.getElementById('marketTime').textContent=now.toLocaleTimeString();
+            
+            function setCard(priceId,changeId,data){
+                var isUp=parseFloat(data.change)>=0;
+                document.getElementById(priceId).textContent='$'+data.price;
+                document.getElementById(changeId).innerHTML='<div class="'+(isUp?'market-up':'market-down')+'">'+(isUp?'▲':'▼')+' '+Math.abs(parseFloat(data.change)).toFixed(2)+'%</div>';
+            }
+            setCard('spyPrice','spyChange',results[0]);
+            setCard('qqqPrice','qqqChange',results[1]);
+            setCard('diaPrice','diaChange',results[2]);
+            
+            // Load briefing separately
+            document.getElementById('briefingText').textContent='Generating briefing...';
+            fetch('/api/market')
+                .then(function(r){return r.json();})
+                .then(function(d){
+                    document.getElementById('briefingText').textContent=d.briefing;
+                })
+                .catch(function(){
+                    document.getElementById('briefingText').textContent='Market briefing unavailable right now.';
+                });
+        }).catch(function(){
+            document.getElementById('marketTime').textContent='Offline';
+        });
+    }
 
+    // Load market data when market tab is clicked
+    document.getElementById('nav-market').addEventListener('click',function(){
+        loadMarketData();
+    });
     // Watchlist
     var slot=0;
     function quickAdd(sym){var s=['s1','s2','s3','s4','s5'];document.getElementById(s[slot%5]).value=sym;slot++;}
@@ -446,11 +551,61 @@
         var syms=[];
         for(var i=1;i<=5;i++){var v=document.getElementById('s'+i).value.trim().toUpperCase();if(v)syms.push(v);}
         if(!syms.length)return;
+        var count = getSearchCount();
+        if(count >= FREE_LIMIT){
+            showUpgradeModal();
+            return;
+        }
+        incrementSearch();
         renderCards(syms,'dashGrid');
     }
+    var FREE_LIMIT = 5;
+
+    function getSearchCount(){
+        var count = parseInt(localStorage.getItem('clairo_searches') || '0');
+        return count;
+    }
+
+    function incrementSearch(){
+        var count = getSearchCount();
+        localStorage.setItem('clairo_searches', count + 1);
+    }
+
+    function showUpgradeModal(){
+        document.getElementById('upgradeModal').style.display='flex';
+    }
+
+    function closeUpgradeModal(){
+        document.getElementById('upgradeModal').style.display='none';
+    }
+
+    async function submitUpgradeEmail(){
+        var email = document.getElementById('upgradeEmail').value;
+        if(!email || email.indexOf('@')===-1){
+            alert('Please enter a valid email.');
+            return;
+        }
+        var response = await fetch('https://formspree.io/f/xyklevqo', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email:email, source:'upgrade_modal'})
+        });
+        if(response.ok){
+            document.getElementById('upgradeSuccess').style.display='block';
+            document.getElementById('upgradeEmail').style.display='none';
+            setTimeout(closeUpgradeModal, 2000);
+        }
+    }
+
     function searchStock(){
         var sym=document.getElementById('searchInput').value.trim().toUpperCase();
         if(!sym)return;
+        var count = getSearchCount();
+        if(count >= FREE_LIMIT){
+            showUpgradeModal();
+            return;
+        }
+        incrementSearch();
         renderCards([sym],'searchGrid');
     }
     document.getElementById('searchInput').addEventListener('keydown',function(e){if(e.key==='Enter')searchStock();});

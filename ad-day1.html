@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clairo Ad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100vw; height: 100vh; overflow: hidden; background: #080808; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; }
+        
+        /* 9:16 container */
+        #app { width: 390px; height: 844px; position: relative; overflow: hidden; background: #080808; }
+        canvas#bg { position: absolute; top: 0; left: 0; width: 390px; height: 844px; z-index: 0; }
+        
+        .scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 28px; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+        .scene.active { opacity: 1; }
+
+        /* SCENE 1 - FLASH CHAOS */
+        .flash-item { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; opacity: 0; }
+        .flash-headline { font-size: 28px; font-weight: 900; color: #fff; text-align: center; letter-spacing: -1px; line-height: 1.2; margin-bottom: 12px; }
+        .flash-sub { font-size: 13px; color: #555; text-align: center; letter-spacing: 1px; }
+        .flash-num { font-size: 72px; font-weight: 900; color: #fff; letter-spacing: -4px; }
+        .flash-label { font-size: 11px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+        .flash-red { color: #ff4d4d; }
+        .flash-green { color: #00c896; }
+
+        /* SCENE 2 - AGITATION */
+        .agit-big { font-size: 52px; font-weight: 900; color: #fff; text-align: center; letter-spacing: -2px; line-height: 1.1; }
+        .agit-big span { color: #00c896; }
+        .agit-sub { font-size: 16px; color: #666; text-align: center; margin-top: 16px; line-height: 1.5; opacity: 0; }
+
+        /* SCENE 3A - SEARCH */
+        .scene-title { font-size: 10px; color: #00c896; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; align-self: flex-start; }
+        .dot-live { width: 5px; height: 5px; background: #00c896; border-radius: 50%; animation: pulse 2s infinite; }
+        .search-mock { background: #0f0f0f; border: 1px solid #00c896; border-radius: 10px; padding: 14px 18px; font-size: 20px; color: #fff; letter-spacing: 3px; font-weight: 700; margin-bottom: 16px; width: 100%; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 20px rgba(0,200,150,0.1); }
+        .s-icon { color: #444; font-size: 16px; }
+        .card { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 14px; padding: 22px; width: 100%; }
+        .card-sym { font-size: 12px; font-weight: 700; color: #666; letter-spacing: 3px; margin-bottom: 6px; }
+        .card-price { font-size: 48px; font-weight: 900; color: #fff; letter-spacing: -2px; line-height: 1; margin-bottom: 4px; }
+        .card-up { font-size: 16px; color: #00c896; font-weight: 600; margin-bottom: 16px; }
+        .card-down { font-size: 16px; color: #ff4d4d; font-weight: 600; margin-bottom: 16px; }
+        .card-div { border: none; border-top: 1px solid #1a1a1a; margin-bottom: 14px; }
+        .card-sum { font-size: 14px; color: #888; line-height: 1.7; min-height: 60px; }
+        .mcursor { display: inline-block; width: 2px; height: 14px; background: #00c896; margin-left: 1px; animation: blink 0.8s infinite; vertical-align: middle; }
+
+        /* SCENE 3B - DASHBOARD */
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .dash-card { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 16px; opacity: 0; }
+        .dc-sym { font-size: 10px; font-weight: 700; color: #555; letter-spacing: 2px; margin-bottom: 4px; }
+        .dc-price { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+        .dc-up { font-size: 12px; color: #00c896; font-weight: 600; margin-bottom: 8px; }
+        .dc-down { font-size: 12px; color: #ff4d4d; font-weight: 600; margin-bottom: 8px; }
+        .dc-sum { font-size: 10px; color: #666; line-height: 1.5; border-top: 1px solid #111; padding-top: 8px; }
+
+        /* SCENE 3C - MARKET */
+        .mkt-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; width: 100%; margin-bottom: 12px; }
+        .mkt-card { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 10px; padding: 14px; }
+        .mkt-name { font-size: 8px; color: #555; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+        .mkt-val { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+        .mkt-up { font-size: 11px; color: #00c896; margin-top: 2px; font-weight: 600; }
+        .brief-box { background: #0d0d0d; border: 1px solid #1a1a1a; border-left: 2px solid #00c896; border-radius: 10px; padding: 16px; width: 100%; }
+        .brief-label { font-size: 9px; color: #00c896; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+        .brief-text { font-size: 13px; color: #777; line-height: 1.7; min-height: 60px; }
+
+        /* SCENE 4 - FEATURES */
+        .feat-wrap { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+        .feat-row { display: flex; align-items: center; gap: 16px; opacity: 0; transform: translateX(-24px); }
+        .feat-row.show { animation: slideIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards; }
+        .feat-num { font-size: 10px; color: #00c896; letter-spacing: 2px; min-width: 28px; font-weight: 700; }
+        .feat-text { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1.1; }
+        .feat-text span { color: #00c896; }
+
+        /* SCENE 5 - CTA */
+        .cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+        .cta-eyebrow { font-size: 10px; color: #555; letter-spacing: 3px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+        .cta-title { font-size: 58px; font-weight: 900; color: #fff; letter-spacing: -3px; text-align: center; line-height: 1; }
+        .cta-title span { color: #00c896; }
+        .cta-box { border: 2px solid rgba(0,200,150,0.5); border-radius: 12px; padding: 18px 24px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0,200,150,0.04); animation: breathe 2s ease-in-out infinite; }
+        .cta-arrow { font-size: 20px; color: #00c896; font-weight: 900; }
+        .cta-url { font-family: 'Courier New', monospace; font-size: 15px; color: #00c896; letter-spacing: 1px; }
+        .cta-url-cur { display: inline-block; width: 8px; height: 16px; background: #00c896; margin-left: 2px; animation: blink 0.8s infinite; vertical-align: middle; }
+        .cta-note { font-size: 12px; color: #444; text-align: center; }
+        .cta-note span { color: #00c896; }
+        .cta-urgency { font-size: 14px; font-weight: 700; color: #fff; text-align: center; letter-spacing: -0.3px; }
+        .cta-urgency span { color: #00c896; }
+
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        @keyframes slideIn { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes glitch { 0%{transform:translate(0);filter:none} 25%{transform:translate(-4px,2px);filter:hue-rotate(90deg)} 50%{transform:translate(4px,-2px);filter:hue-rotate(180deg)} 75%{transform:translate(-2px,4px);filter:hue-rotate(270deg)} 100%{transform:translate(0);filter:none} }
+        @keyframes redFlash { 0%{opacity:0} 50%{opacity:1} 100%{opacity:0} }
+        @keyframes scanWipe { 0%{transform:translateX(-100%);opacity:1} 100%{transform:translateX(100%);opacity:1} }
+        @keyframes labelPop { 0%{opacity:0;transform:scale(0.8)} 60%{transform:scale(1.05)} 100%{opacity:1;transform:scale(1)} }
+        @keyframes breathe { 0%,100%{box-shadow:0 0 40px rgba(0,200,150,0.12)} 50%{box-shadow:0 0 60px rgba(0,200,150,0.35),0 0 100px rgba(0,200,150,0.15)} }
+    </style>
+</head>
+<body>
+<div id="app">
+<canvas id="bg" width="390" height="844"></canvas>
+<div id="redFlash" style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,50,50,0.15);z-index:10;opacity:0;pointer-events:none;"></div>
+<div id="shutter" style="position:absolute;top:0;left:0;width:8px;height:100%;background:linear-gradient(90deg,transparent,rgba(0,200,150,0.6),transparent);z-index:11;opacity:0;pointer-events:none;"></div>
+<!-- SCENE 1: FLASH CHAOS -->
+<div class="scene" id="s1">
+    <div style="position:absolute;top:28px;left:0;width:100%;text-align:center;font-size:13px;color:#ff4d4d;letter-spacing:4px;text-transform:uppercase;font-weight:900;animation:labelPop 0.6s ease forwards 0.3s;opacity:0;text-shadow:0 0 20px rgba(255,77,77,0.6)">⚠ Without Clairo</div>
+    <div class="flash-item" id="f_1">
+        <div class="flash-num flash-red">-4.7%</div>
+        <div class="flash-label">TSLA dropped — but why?</div>
+    </div>
+    <div class="flash-item" id="f_2">
+        <div class="flash-headline">Fed signals hawkish pivot<br>amid core PCE concerns</div>
+        <div class="flash-sub">MACD · RSI · Yield curve · Options flow</div>
+    </div>
+    <div class="flash-item" id="f_3">
+        <div class="flash-num flash-green">+2.1%</div>
+        <div class="flash-label">NVDA surged — do you know why?</div>
+    </div>
+    <div class="flash-item" id="f_4">
+        <div class="flash-headline">Sector rotation out of growth<br>into defensive names</div>
+        <div class="flash-sub">P/E · Beta · Float · Short interest · IV</div>
+    </div>
+    <div class="flash-item" id="f_5">
+        <div class="flash-headline" style="font-size:22px">Yield curve inversion deepens<br>on 2Y/10Y spread divergence</div>
+        <div class="flash-sub">What does this mean for your portfolio?</div>
+    </div>
+    <div class="flash-item" id="f_6">
+        <div style="font-size:48px;font-weight:900;color:#fff;letter-spacing:-2px;text-align:center;line-height:1.1" id="chaosText"></div>
+    </div>
+</div>
+
+<!-- SCENE 2: AGITATION -->
+<div class="scene" id="s2">
+    <div style="text-align:center;width:100%">
+        <div style="font-size:10px;color:#555;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px">The problem</div>
+        <div class="agit-big" id="agitText"></div>
+        <div class="agit-sub" id="agitSub">Plain English. Every morning.<br>Takes 30 seconds.</div>
+    </div>
+</div>
+
+<!-- SCENE 3A: SEARCH -->
+<div class="scene" id="s3a">
+    <div class="scene-title"><span class="dot-live"></span>Search — Any Stock</div>
+    <div class="search-mock"><span class="s-icon">⌕</span><span id="searchTyped"></span><span class="mcursor"></span></div>
+    <div class="card">
+        <div class="card-sym">AAPL</div>
+        <div class="card-price">$271.48</div>
+        <div class="card-up">▲ 1.22% today</div>
+        <div class="card-div"></div>
+        <div class="card-sum" id="sum3a"><span class="mcursor"></span></div>
+    </div>
+</div>
+
+<!-- SCENE 3B: DASHBOARD -->
+<div class="scene" id="s3b">
+    <div class="scene-title"><span class="dot-live"></span>Dashboard — Your Watchlist</div>
+    <div class="dash-grid">
+        <div class="dash-card" style="animation:fadeUp 0.35s ease forwards 0.1s">
+            <div class="dc-sym">AAPL</div><div class="dc-price">$271.48</div><div class="dc-up">▲ 1.22%</div>
+            <div class="dc-sum">Rose on services momentum. Watch next product event for catalyst.</div>
+        </div>
+        <div class="dash-card" style="animation:fadeUp 0.35s ease forwards 0.3s">
+            <div class="dc-sym">TSLA</div><div class="dc-price">$401.20</div><div class="dc-up">▲ 0.89%</div>
+            <div class="dc-sum">Gained on delivery optimism. Monitor quarterly numbers closely.</div>
+        </div>
+        <div class="dash-card" style="animation:fadeUp 0.35s ease forwards 0.5s">
+            <div class="dc-sym">NVDA</div><div class="dc-price">$201.68</div><div class="dc-up">▲ 1.44%</div>
+            <div class="dc-sum">Chip demand strong. Data center revenue is key metric to watch.</div>
+        </div>
+        <div class="dash-card" style="animation:fadeUp 0.35s ease forwards 0.7s">
+            <div class="dc-sym">META</div><div class="dc-price">$677.12</div><div class="dc-down">▼ 0.31%</div>
+            <div class="dc-sum">Slight dip on profit taking. Ad revenue outlook remains solid.</div>
+        </div>
+    </div>
+</div>
+
+<!-- SCENE 3C: MARKET -->
+<div class="scene" id="s3c">
+    <div class="scene-title"><span class="dot-live"></span>Market Tab — Full Overview</div>
+    <div class="mkt-row">
+        <div class="mkt-card"><div class="mkt-name">S&P 500</div><div class="mkt-val">$710.14</div><div class="mkt-up">▲ 0.57%</div></div>
+        <div class="mkt-card"><div class="mkt-name">NASDAQ</div><div class="mkt-val">$648.85</div><div class="mkt-up">▲ 0.50%</div></div>
+        <div class="mkt-card"><div class="mkt-name">DOW</div><div class="mkt-val">$494.22</div><div class="mkt-up">▲ 0.72%</div></div>
+    </div>
+    <div class="brief-box">
+        <div class="brief-label">Today's Briefing</div>
+        <div class="brief-text" id="sum3c"><span class="mcursor"></span></div>
+    </div>
+</div>
+
+<!-- SCENE 4: FEATURES -->
+<div class="scene" id="s4">
+    <div style="font-size:10px;color:#555;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;align-self:flex-start">Why Clairo</div>
+    <div class="feat-wrap">
+        <div class="feat-row" id="f1"><span class="feat-num">01</span><div class="feat-text">Real prices.<br><span>Live data.</span></div></div>
+        <div class="feat-row" id="f2"><span class="feat-num">02</span><div class="feat-text">Plain English.<br><span>No jargon.</span></div></div>
+        <div class="feat-row" id="f3"><span class="feat-num">03</span><div class="feat-text">30 seconds.<br><span>Every morning.</span></div></div>
+        <div class="feat-row" id="f4"><span class="feat-num">04</span><div class="feat-text">Free now.<br><span>Going paid soon.</span></div></div>
+    </div>
+</div>
+
+<!-- SCENE 5: CTA -->
+<div class="scene" id="s5">
+    <div class="cta-wrap">
+        <div class="cta-eyebrow"><span style="width:6px;height:6px;background:#00c896;border-radius:50%;display:inline-block;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(0,200,150,0.8)"></span>Early Access Open</div>
+        <div class="cta-title">Try <span>Clairo</span><br>For Free.</div>
+        <div class="cta-box">
+            <div class="cta-arrow">→</div>
+            <div class="cta-url" id="ctaUrl"><span class="cta-url-cur"></span></div>
+        </div>
+        <div class="cta-urgency">Join before it <span>goes paid →</span></div>
+        <div class="cta-note">Free during early access · <span>No card needed</span></div>
+    </div>
+</div>
+</div>
+
+<script>
+    // BG
+    var bg=document.getElementById('bg');
+    var ctx=bg.getContext('2d');
+    var bgPulses=[];
+    setInterval(function(){bgPulses.push({r:0,a:0.2});},1200);
+    bgPulses.push({r:0,a:0.2});
+    function drawBg(){
+        ctx.clearRect(0,0,390,844);
+        var rad=ctx.createRadialGradient(195,422,0,195,422,350);
+        rad.addColorStop(0,'rgba(0,200,150,0.07)');rad.addColorStop(1,'rgba(0,200,150,0)');
+        ctx.fillStyle=rad;ctx.fillRect(0,0,390,844);
+        ctx.strokeStyle='rgba(0,200,150,0.04)';ctx.lineWidth=0.5;
+        for(var x=0;x<390;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,844);ctx.stroke();}
+        for(var y=0;y<844;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(390,y);ctx.stroke();}
+        bgPulses.forEach(function(p,i){
+            p.r+=2;p.a-=0.003;
+            if(p.a<=0){bgPulses.splice(i,1);return;}
+            ctx.beginPath();ctx.arc(195,422,p.r,0,Math.PI*2);
+            ctx.strokeStyle='rgba(0,200,150,'+p.a+')';ctx.lineWidth=1;ctx.stroke();
+        });
+        requestAnimationFrame(drawBg);
+    }
+    drawBg();
+
+    var scenes=['s1','s2','s3a','s3b','s3c','s4','s5'];
+    function showScene(idx){
+        var sh=document.getElementById('shutter');
+        sh.style.animation='none';
+        sh.offsetHeight;
+        sh.style.animation='scanWipe 0.35s ease forwards';
+        scenes.forEach(function(s){document.getElementById(s).classList.remove('active');});
+        document.getElementById(scenes[idx]).classList.add('active');
+    }
+    showScene(0);
+
+    // SCENE 1 — rapid flash
+    var flashItems=['f_1','f_2','f_3','f_4','f_5'];
+    var fi=0;
+    function flashNext(){
+        if(fi>0) document.getElementById(flashItems[fi-1]).style.opacity='0';
+        // Red flash between items
+        var rf=document.getElementById('redFlash');
+        rf.style.animation='none';
+        rf.offsetHeight;
+        rf.style.animation='redFlash 0.2s ease forwards';
+        if(fi<flashItems.length){
+            document.getElementById(flashItems[fi]).style.opacity='1';
+            fi++;
+            setTimeout(flashNext, fi===1||fi===3?600:700);
+        } else {
+            // Show chaos text
+            document.getElementById(flashItems[flashItems.length-1]).style.opacity='0';
+            document.getElementById('f_6').style.opacity='1';
+            var el=document.getElementById('chaosText');
+            el.style.color='#ff4d4d';
+            el.textContent='Too much noise.';
+            setTimeout(function(){
+                el.style.color='#fff';
+                el.innerHTML='Too much noise.<br><span style="color:#ff4d4d">Not enough clarity.</span>';
+            },800);
+        }
+    }
+    setTimeout(flashNext, 400);
+
+    // SCENE 2
+    setTimeout(function(){
+        showScene(1);
+        var el=document.getElementById('agitText');
+        var sub=document.getElementById('agitSub');
+        el.style.opacity='0';
+        setTimeout(function(){
+            el.innerHTML='Most investors just guess.';
+            el.style.opacity='1';
+            el.style.animation='fadeUp 0.5s ease forwards';
+        },300);
+        setTimeout(function(){
+            el.style.opacity='0';
+            setTimeout(function(){
+                el.innerHTML='<span>We fixed that.</span>';
+                el.style.opacity='1';
+                el.style.animation='fadeUp 0.5s ease forwards';
+                sub.style.animation='fadeUp 0.8s ease forwards';
+            },300);
+        },1800);
+    
+    },7500);
+
+    // SCENE 3A
+    setTimeout(function(){
+        showScene(2);
+        var searchEl=document.getElementById('searchTyped');
+        var sym='AAPL'; var si=0;
+        var t=setInterval(function(){
+            if(si<=sym.length){searchEl.textContent=sym.substring(0,si);si++;}
+            else clearInterval(t);
+        },100);
+        var sum='Apple rose 1.22% today driven by strong momentum in its services and software division, with investors showing renewed confidence heading into the next earnings report. Watch closely for their upcoming product event — analysts widely expect major hardware and platform announcements that could act as a significant catalyst for the stock.';
+        var sumEl=document.getElementById('sum3a'); var sui=0;
+        setTimeout(function(){
+            var t2=setInterval(function(){
+                if(sui<=sum.length){sumEl.innerHTML=sum.substring(0,sui)+'<span class="mcursor"></span>';sui++;}
+                else clearInterval(t2);
+            },22);
+        },700);
+    },9000);
+
+    // SCENE 3B
+    setTimeout(function(){showScene(3);},14500);
+
+    // SCENE 3C
+    setTimeout(function(){
+        showScene(4);
+        var brief='Markets rose broadly today with the S&P 500, NASDAQ, and DOW all posting gains between 0.5% and 0.7%, signaling broad investor confidence. Tech stocks led the move — watch Fed commentary this week closely, as interest rate signals will likely be the biggest driver of market direction.';
+        var el=document.getElementById('sum3c'); var i=0;
+        var t=setInterval(function(){
+            if(i<=brief.length){el.innerHTML=brief.substring(0,i)+'<span class="mcursor"></span>';i++;}
+            else clearInterval(t);
+        },22);
+    },18500);
+
+    // SCENE 4
+    setTimeout(function(){
+        showScene(5);
+        setTimeout(function(){document.getElementById('f1').classList.add('show');},200);
+        setTimeout(function(){document.getElementById('f2').classList.add('show');},600);
+        setTimeout(function(){document.getElementById('f3').classList.add('show');},1000);
+        setTimeout(function(){document.getElementById('f4').classList.add('show');},1400);
+    },23000);
+
+    // SCENE 5
+    setTimeout(function(){
+        showScene(6);
+        var url='clairo-app.up.railway.app';
+        var el=document.getElementById('ctaUrl'); var i=0;
+        setTimeout(function(){
+            var t=setInterval(function(){
+                if(i<=url.length){el.innerHTML=url.substring(0,i)+'<span class="cta-url-cur"></span>';i++;}
+                else clearInterval(t);
+            },50);
+        },500);
+    },27000);
+</script>
+</body>
+</html>

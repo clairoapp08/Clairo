@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clairo CTA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #080808; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; flex-direction: column; }
+        canvas { position: absolute; top: 0; left: 0; z-index: 0; }
+        .wrap { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; padding: 0 40px; }
+        .eyebrow { font-family: 'Inter', sans-serif; font-size: 10px; color: #333; letter-spacing: 4px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
+        .live-dot { width: 5px; height: 5px; background: #00c896; border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 6px rgba(0,200,150,0.8); }
+        .main-text-wrap { position: relative; overflow: hidden; opacity: 0; animation: fadeUp 0.8s ease forwards 0.5s; }
+        .main-text { font-family: 'Inter', sans-serif; font-size: 72px; font-weight: 900; color: #fff; letter-spacing: -3px; line-height: 1.05; position: relative; z-index: 1; }
+        .main-text span { color: #00c896; }
+        .scanner { position: absolute; top: 0; left: -100%; width: 80px; height: 100%; background: linear-gradient(90deg, transparent, rgba(0,200,150,0.12), transparent); animation: scan 3s ease-in-out infinite 1.5s; z-index: 2; }
+        @keyframes scan { 0%{left:-20%} 100%{left:120%} }
+        .divider { width: 0; height: 1px; background: linear-gradient(90deg, transparent, #00c896, transparent); animation: expandLine 1s ease forwards 1.1s; box-shadow: 0 0 8px rgba(0,200,150,0.4); opacity: 0; animation: expandLine 1s ease forwards 1.1s, fadeIn 0.1s ease forwards 1.1s; }
+        @keyframes expandLine { from{width:0} to{width:280px} }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .url-box { border: 1px solid rgba(0,200,150,0.4); border-radius: 6px; padding: 14px 28px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s ease forwards 1.6s; box-shadow: 0 0 20px rgba(0,200,150,0.08), inset 0 0 20px rgba(0,200,150,0.03); background: rgba(0,200,150,0.03); }
+        .url-arrow { font-size: 14px; color: #00c896; font-weight: 700; }
+        .url-text { font-family: 'Courier New', monospace; font-size: 16px; color: #00c896; letter-spacing: 1px; }
+        .url-cursor { display: inline-block; width: 9px; height: 16px; background: #00c896; margin-left: 2px; animation: blink 0.8s infinite; vertical-align: middle; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .fine-print { font-family: 'Inter', sans-serif; font-size: 9px; color: #222; letter-spacing: 2px; text-transform: uppercase; opacity: 0; animation: fadeUp 0.8s ease forwards 2.2s; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 6px rgba(0,200,150,0.8)} 50%{opacity:0.3;box-shadow:0 0 2px rgba(0,200,150,0.2)} }
+    </style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="wrap">
+    <div class="eyebrow"><span class="live-dot"></span>Early Access Open Now</div>
+    <div class="main-text-wrap">
+        <div class="main-text">Stop Guessing.<br><span>Start Knowing.</span></div>
+        <div class="scanner"></div>
+    </div>
+    <div class="divider"></div>
+    <div class="url-box">
+        <div class="url-arrow">→</div>
+        <div class="url-text" id="urlText"><span class="url-cursor"></span></div>
+    </div>
+    <div class="fine-print">Free during early access · No credit card required</div>
+</div>
+<script>
+    // Clean grid background
+    var bg=document.getElementById('bg');
+    var ctx=bg.getContext('2d');
+    bg.width=window.innerWidth;bg.height=window.innerHeight;
+
+    var glowX=bg.width/2,glowY=bg.height/2;
+    var glowAngle=0;
+
+    function drawBg(){
+        ctx.clearRect(0,0,bg.width,bg.height);
+
+        // Radial glow center
+        var radial=ctx.createRadialGradient(glowX,glowY,0,glowX,glowY,400);
+        radial.addColorStop(0,'rgba(0,200,150,0.04)');
+        radial.addColorStop(1,'rgba(0,200,150,0)');
+        ctx.fillStyle=radial;
+        ctx.fillRect(0,0,bg.width,bg.height);
+
+        // Grid
+        ctx.strokeStyle='rgba(0,200,150,0.04)';ctx.lineWidth=0.5;
+        for(var x=0;x<bg.width;x+=80){
+            ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,bg.height);ctx.stroke();
+        }
+        for(var y=0;y<bg.height;y+=60){
+            ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(bg.width,y);ctx.stroke();
+        }
+
+        // Slowly rotating corner accent lines
+        glowAngle+=0.003;
+        ctx.strokeStyle='rgba(0,200,150,0.06)';ctx.lineWidth=1;
+        ctx.save();
+        ctx.translate(bg.width/2,bg.height/2);
+        ctx.rotate(glowAngle);
+        for(var i=0;i<4;i++){
+            ctx.rotate(Math.PI/2);
+            ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(600,0);ctx.stroke();
+        }
+        ctx.restore();
+
+        requestAnimationFrame(drawBg);
+    }
+    drawBg();
+
+    // Typewriter URL
+    var url='clairo-app.up.railway.app';
+    var urlEl=document.getElementById('urlText');
+    var idx=0;
+    setTimeout(function(){
+        var timer=setInterval(function(){
+            if(idx<=url.length){
+                urlEl.innerHTML=url.substring(0,idx)+'<span class="url-cursor"></span>';
+                idx++;
+            } else {
+                clearInterval(timer);
+                // Restart after pause
+                setTimeout(function(){
+                    idx=0;
+                    urlEl.innerHTML='<span class="url-cursor"></span>';
+                    var timer2=setInterval(function(){
+                        if(idx<=url.length){
+                            urlEl.innerHTML=url.substring(0,idx)+'<span class="url-cursor"></span>';
+                            idx++;
+                        } else {
+                            clearInterval(timer2);
+                        }
+                    },60);
+                },3000);
+            }
+        },60);
+    },2000);
+</script>
+</body>
+</html>

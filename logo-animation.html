@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clairo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #080808; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; flex-direction: column; }
+        canvas#bg { position: absolute; top: 0; left: 0; z-index: 0; }
+        .wrap { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .top-label { font-family: 'Inter', sans-serif; font-size: 10px; color: #333; letter-spacing: 4px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
+        .live-dot { width: 5px; height: 5px; background: #00c896; border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 6px rgba(0,200,150,0.8); }
+        .logo-wrap { position: relative; overflow: hidden; opacity: 0; animation: fadeUp 0.8s ease forwards 0.5s; }
+        .logo-text { font-family: 'Inter', sans-serif; font-size: 88px; font-weight: 900; color: #fff; letter-spacing: -4px; position: relative; z-index: 1; }
+        .logo-text span { color: #00c896; }
+        .scanner { position: absolute; top: 0; left: -100%; width: 60px; height: 100%; background: linear-gradient(90deg, transparent, rgba(0,200,150,0.15), transparent); animation: scan 3s ease-in-out infinite; z-index: 2; }
+        @keyframes scan { 0% { left: -20%; } 100% { left: 120%; } }
+        .logo-line { width: 0; height: 1px; background: linear-gradient(90deg, transparent, #00c896, transparent); animation: expandLine 1.2s ease forwards 1s; box-shadow: 0 0 8px rgba(0,200,150,0.5); }
+        .logo-sub { font-family: 'Inter', sans-serif; font-size: 9px; color: #444; letter-spacing: 4px; text-transform: uppercase; opacity: 0; animation: fadeUp 0.8s ease forwards 1.4s; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes expandLine { from { width: 0; } to { width: 260px; } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="wrap">
+    <div class="top-label"><span class="live-dot"></span> Live Market Intelligence</div>
+    <div class="logo-wrap">
+        <div class="logo-text">CLAI<span>RO</span></div>
+        <div class="scanner"></div>
+    </div>
+    <div class="logo-line"></div>
+    <div class="logo-sub">Market Data · Instant Analysis · Always On</div>
+</div>
+<canvas id="spike" style="position:relative;z-index:2;margin-top:40px;"></canvas>
+<script>
+    // Background grid
+    var bg=document.getElementById('bg');
+    var bgCtx=bg.getContext('2d');
+    bg.width=window.innerWidth;bg.height=window.innerHeight;
+    function drawBg(){
+        bgCtx.clearRect(0,0,bg.width,bg.height);
+        bgCtx.strokeStyle='rgba(0,200,150,0.03)';bgCtx.lineWidth=0.5;
+        for(var x=0;x<bg.width;x+=80){bgCtx.beginPath();bgCtx.moveTo(x,0);bgCtx.lineTo(x,bg.height);bgCtx.stroke();}
+        for(var y=0;y<bg.height;y+=60){bgCtx.beginPath();bgCtx.moveTo(0,y);bgCtx.lineTo(bg.width,y);bgCtx.stroke();}
+        requestAnimationFrame(drawBg);
+    }
+    drawBg();
+
+    // Traveling spike
+    var sp=document.getElementById('spike');
+    var sCtx=sp.getContext('2d');
+    sp.width=500;sp.height=80;
+    var W=500,H=80,mid=H/2;
+    var spikeX=0;
+    var trailPts=[];
+
+    function drawSpike(){
+        sCtx.clearRect(0,0,W,H);
+
+        // Baseline
+        sCtx.beginPath();sCtx.moveTo(0,mid);sCtx.lineTo(W,mid);
+        sCtx.strokeStyle='rgba(0,200,150,0.12)';sCtx.lineWidth=1;sCtx.stroke();
+
+        // Trail
+        if(trailPts.length>1){
+            sCtx.beginPath();
+            sCtx.moveTo(trailPts[0].x,trailPts[0].y);
+            for(var i=1;i<trailPts.length;i++){
+                sCtx.lineTo(trailPts[i].x,trailPts[i].y);
+            }
+            sCtx.strokeStyle='rgba(0,200,150,0.4)';
+            sCtx.lineWidth=2;
+            sCtx.shadowBlur=8;sCtx.shadowColor='#00c896';
+            sCtx.stroke();sCtx.shadowBlur=0;
+        }
+
+        // Fade old trail points
+        for(var i=trailPts.length-1;i>=0;i--){
+            trailPts[i].alpha-=0.02;
+            if(trailPts[i].alpha<=0)trailPts.splice(i,1);
+        }
+
+        // Current spike shape
+        var sx=spikeX;
+        var spikeShape=[
+            {dx:-40,dy:0},{dx:-20,dy:0},{dx:-15,dy:-2},
+            {dx:-10,dy:0},{dx:-5,dy:-6},{dx:0,dy:-38},
+            {dx:6,dy:32},{dx:12,dy:-8},{dx:18,dy:0},
+            {dx:22,dy:0},{dx:40,dy:0}
+        ];
+
+        sCtx.beginPath();
+        var started=false;
+        for(var i=0;i<spikeShape.length;i++){
+            var px=sx+spikeShape[i].dx;
+            var py=mid+spikeShape[i].dy;
+            if(px<0||px>W)continue;
+            if(!started){sCtx.moveTo(px,py);started=true;}
+            else sCtx.lineTo(px,py);
+            trailPts.push({x:px,y:py,alpha:1});
+        }
+        sCtx.strokeStyle='#00c896';
+        sCtx.lineWidth=2.5;
+        sCtx.shadowBlur=12;sCtx.shadowColor='#00c896';
+        sCtx.stroke();sCtx.shadowBlur=0;
+
+        // Glowing dot at spike tip
+        sCtx.beginPath();sCtx.arc(sx,mid-35,4,0,Math.PI*2);
+        sCtx.fillStyle='#00c896';
+        sCtx.shadowBlur=14;sCtx.shadowColor='#00c896';
+        sCtx.fill();sCtx.shadowBlur=0;
+
+        spikeX+=2.5;
+        if(spikeX>W+50)spikeX=-50;
+
+        requestAnimationFrame(drawSpike);
+    }
+    drawSpike();
+</script>
+</body>
+</html>

@@ -81,7 +81,7 @@
         .content::-webkit-scrollbar { width: 3px; }
         .content::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
 
-        .section-label { font-size: 10px; font-weight: 700; color: #333; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+        .section-label { font-size: 11px; font-weight: 700; color: #777; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
 
         .search-box { display: flex; align-items: center; gap: 10px; background: #0f0f0f; border: 1px solid #1a1a1a; border-radius: 8px; padding: 10px 14px; margin-bottom: 20px; transition: border-color 0.2s; }
         .search-box:focus-within { border-color: #00c896; }
@@ -102,13 +102,13 @@
         @keyframes cardIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
         .stock-card:hover { border-color: #00c896; }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .card-symbol { font-size: 10px; font-weight: 700; color: #444; letter-spacing: 2px; margin-bottom: 4px; }
+        .card-symbol { font-size: 11px; font-weight: 700; color: #aaa; letter-spacing: 2px; margin-bottom: 4px; }
         .card-price { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1; }
         .card-up { font-size: 11px; font-weight: 600; color: #00c896; margin-top: 3px; }
         .card-down { font-size: 11px; font-weight: 600; color: #ff4d4d; margin-top: 3px; }
         .mini-chart { width: 72px; height: 36px; }
         .card-divider { border: none; border-top: 1px solid #111; margin: 12px 0; }
-        .card-summary { font-size: 11px; color: #444; line-height: 1.7; }
+        .card-summary { font-size: 12px; color: #888; line-height: 1.7; }
 
         .skeleton { height: 8px; background: linear-gradient(90deg,#111,#1a1a1a,#111); background-size: 200%; border-radius: 4px; animation: shimmer 1.5s infinite; margin-bottom: 6px; }
         @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
@@ -126,9 +126,9 @@
         .market-val { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
         .market-up { font-size: 11px; color: #00c896; margin-top: 4px; font-weight: 600; }
         .market-down { font-size: 11px; color: #ff4d4d; margin-top: 4px; font-weight: 600; }
-        .briefing-box { background: #0f0f0f; border: 1px solid #1a1a1a; border-radius: 10px; padding: 20px; }
-        .briefing-label { font-size: 10px; font-weight: 700; color: #333; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-        .briefing-text { font-size: 12px; color: #444; line-height: 1.8; }
+        .briefing-box { background: #0f0f0f; border: 1px solid #1a1a1a; border-left: 2px solid #00c896; border-radius: 10px; padding: 20px; }
+        .briefing-label { font-size: 10px; font-weight: 700; color: #00c896; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+        .briefing-text { font-size: 12px; color: #555; line-height: 1.8; }
     </style>
 </head>
 <body>
@@ -211,8 +211,8 @@
             </div>
             <div class="cards-grid" id="dashGrid">
                 <div class="empty-state">
-                    <div style="font-size:28px;color:#00c896;margin-bottom:12px">↗</div>
-                    <div class="empty-title">Your watchlist is empty</div>
+                    <div style="font-size:10px;color:#00c896;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;animation:pulse 2s infinite">— Watchlist Empty —</div>
+                    <div class="empty-title">Start tracking your stocks</div>
                     <div class="empty-sub">Enter up to 5 stock symbols above and click Update</div>
                     <div class="empty-tags">
                         <div class="empty-tag" onclick="quickAdd('AAPL')">AAPL</div>
@@ -220,6 +220,13 @@
                         <div class="empty-tag" onclick="quickAdd('NVDA')">NVDA</div>
                         <div class="empty-tag" onclick="quickAdd('GOOGL')">GOOGL</div>
                         <div class="empty-tag" onclick="quickAdd('META')">META</div>
+                        <div class="empty-tag" onclick="quickAdd('MSFT')">MSFT</div>
+                        <div class="empty-tag" onclick="quickAdd('AMZN')">AMZN</div>
+                        <div class="empty-tag" onclick="quickAdd('SPY')">SPY</div>
+                        <div class="empty-tag" onclick="quickAdd('NFLX')">NFLX</div>
+                        <div class="empty-tag" onclick="quickAdd('AMD')">AMD</div>
+                        <div class="empty-tag" onclick="quickAdd('COIN')">COIN</div>
+                        <div class="empty-tag" onclick="quickAdd('PLTR')">PLTR</div>
                     </div>
                 </div>
             </div>
@@ -277,6 +284,10 @@
             <div class="briefing-box">
                 <div class="briefing-label">Today's Briefing</div>
                 <div class="briefing-text" id="briefingText"><div class="skeleton" style="width:100%;margin-bottom:6px"></div><div class="skeleton" style="width:90%;margin-bottom:6px"></div><div class="skeleton" style="width:80%"></div></div>
+            </div>
+            <div style="margin-top:16px;">
+                <div class="section-label" style="margin-bottom:12px">Trending Today</div>
+                <div class="cards-grid" id="trendingGrid"></div>
             </div>
         </div>
     </div>
@@ -393,8 +404,16 @@
     var pulses=[];
     function resizeS(){sC.width=sC.parentElement.offsetWidth;sC.height=sC.parentElement.offsetHeight||500;}
     resizeS(); window.addEventListener('resize',resizeS);
-    setInterval(function(){pulses.push({r:.0,a:0.5});},1800);
+    var isHoveringTag=false;
+    setInterval(function(){pulses.push({r:0,a:isHoveringTag?0.8:0.5});},isHoveringTag?800:1800);
     pulses.push({r:0,a:0.5});
+
+    document.addEventListener('mouseover',function(e){
+        if(e.target.classList.contains('empty-tag'))isHoveringTag=true;
+    });
+    document.addEventListener('mouseout',function(e){
+        if(e.target.classList.contains('empty-tag'))isHoveringTag=false;
+    });
     function drawSrch(){
         if(!document.getElementById('view-search').classList.contains('active')){requestAnimationFrame(drawSrch);return;}
         var w=sC.width,h=sC.height;
@@ -407,7 +426,7 @@
         sX.beginPath();sX.moveTo(cx,0);sX.lineTo(cx,h);sX.stroke();
         sX.beginPath();sX.moveTo(0,cy);sX.lineTo(w,cy);sX.stroke();
         pulses.forEach(function(p,i){
-            p.r+=1.2; p.a-=0.004;
+            p.r+=isHoveringTag?2.0:1.2; p.a-=isHoveringTag?0.006:0.004;
             if(p.a<=0){pulses.splice(i,1);return;}
             sX.beginPath();sX.arc(cx,cy,p.r,0,Math.PI*2);
             sX.strokeStyle='rgba(0,200,150,'+p.a+')';sX.lineWidth=1;sX.stroke();
@@ -542,7 +561,22 @@ function drawMkt(){
     // Load market data when market tab is clicked
     document.getElementById('nav-market').addEventListener('click',function(){
         loadMarketData();
+        loadTrending();
     });
+
+    function loadTrending(){
+        var trending=['NVDA','TSLA','AAPL','META'];
+        var grid=document.getElementById('trendingGrid');
+        grid.innerHTML='';
+        trending.forEach(function(sym,idx){
+            var card=document.createElement('div');
+            card.className='stock-card';
+            card.style.animationDelay=(idx*0.08)+'s';
+            card.innerHTML='<div class="skeleton" style="width:40%;height:10px;margin-bottom:10px"></div><div class="skeleton" style="width:55%;height:22px;margin-bottom:16px"></div><div class="skeleton"></div><div class="skeleton" style="width:90%"></div><div class="skeleton" style="width:70%"></div>';
+            grid.appendChild(card);
+            fetchStock(sym,card);
+        });
+    }
     // Watchlist
     var slot=0;
     function quickAdd(sym){var s=['s1','s2','s3','s4','s5'];document.getElementById(s[slot%5]).value=sym;slot++;}

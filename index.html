@@ -363,7 +363,7 @@
 </section>
 <section class="cta-section scroll-reveal" id="waitlist">
     <div class="cta-label">Early access</div>
-<div style="font-size:11px;color:#333;margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:1px;text-transform:uppercase;"><span style="width:6px;height:6px;background:#00c896;border-radius:50%;display:inline-block;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(0,200,150,0.6)"></span><span id="waitlistCount">0</span> people on the waitlist</div>
+    <div style="font-size:11px;color:#444;margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:1px;text-transform:uppercase;"><span style="width:6px;height:6px;background:#00c896;border-radius:50%;display:inline-block;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(0,200,150,0.6)"></span>Early access open now</div>
     <div class="cta-title">Start knowing<br>your <em>market.</em></div>
     <div class="email-form">
         <input type="email" placeholder="your@email.com" id="emailInput" />
@@ -729,13 +729,7 @@ animRing();
 var lockEls='.btn-primary,.btn-secondary,.nav-btn,.empty-tag,.feature,.stat,.slide-left,.scroll-reveal,.slide-right';
 document.addEventListener('mouseover',function(e){ if(e.target.closest(lockEls)){ cur.classList.add('locked'); ring.classList.add('locked'); } });
 document.addEventListener('mouseout',function(e){ if(e.target.closest(lockEls)){ cur.classList.remove('locked'); ring.classList.remove('locked'); } });
-// Waitlist counter
-var baseCount = 312;
-    var startDate = new Date('2026-04-18').getTime();
-    var today = new Date().getTime();
-    var daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-    var currentCount = baseCount + (daysPassed * 7) + Math.floor(Math.random() * 5);
-    document.getElementById('waitlistCount').textContent = currentCount;
+
 </script>
 
 </body>

@@ -283,7 +283,7 @@
             </div>
             <div class="briefing-box">
                 <div class="briefing-label">Today's Briefing</div>
-                <div class="briefing-text" id="briefingText"><div class="skeleton" style="width:100%;margin-bottom:6px"></div><div class="skeleton" style="width:90%;margin-bottom:6px"></div><div class="skeleton" style="width:80%"></div></div>
+                <div class="briefing-text" id="briefingText"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:5px;height:5px;background:#00c896;border-radius:50%;animation:pulse 1s infinite;box-shadow:0 0 6px rgba(0,200,150,0.8)"></div><div style="font-size:10px;color:#00c896;letter-spacing:1px" id="briefingLoader">Analyzing market conditions...</div></div><div class="skeleton" style="width:100%;margin-bottom:6px"></div><div class="skeleton" style="width:90%;margin-bottom:6px"></div><div class="skeleton" style="width:80%"></div></div>
             </div>
             <div style="margin-top:16px;">
                 <div class="section-label" style="margin-bottom:12px">Trending Today</div>
@@ -544,10 +544,17 @@ function drawMkt(){
             setCard('diaPrice','diaChange',results[2]);
             
             // Load briefing separately
-            document.getElementById('briefingText').textContent='Generating briefing...';
+            var briefMsgs=['Analyzing market conditions...','Reading today\'s news...','Generating briefing...'];
+            var bIdx=0;
+            var bTimer=setInterval(function(){
+                bIdx=(bIdx+1)%briefMsgs.length;
+                var el=document.getElementById('briefingLoader');
+                if(el)el.textContent=briefMsgs[bIdx];
+            },800);
             fetch('/api/market')
                 .then(function(r){return r.json();})
                 .then(function(d){
+                    clearInterval(bTimer);
                     document.getElementById('briefingText').textContent=d.briefing;
                 })
                 .catch(function(){
@@ -651,17 +658,38 @@ function drawMkt(){
             var card=document.createElement('div');
             card.className='stock-card';
             card.style.animationDelay=(idx*0.08)+'s';
-            card.innerHTML='<div class="skeleton" style="width:40%;height:10px;margin-bottom:10px"></div><div class="skeleton" style="width:55%;height:22px;margin-bottom:16px"></div><div class="skeleton"></div><div class="skeleton" style="width:90%"></div><div class="skeleton" style="width:70%"></div>';
+            var messages=['Analyzing market data...','Fetching live price...','Reading latest news...','Generating summary...'];
+            var msgIdx=0;
+            var loadId='load-'+sym+'-'+Date.now();
+            card.innerHTML=
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">'+
+                '<div style="font-size:11px;font-weight:700;color:#00c896;letter-spacing:2px">'+sym+'</div>'+
+                '<div style="width:5px;height:5px;background:#00c896;border-radius:50%;animation:pulse 1s infinite;box-shadow:0 0 6px rgba(0,200,150,0.8)"></div>'+
+                '</div>'+
+                '<div class="skeleton" style="width:60%;height:28px;margin-bottom:8px"></div>'+
+                '<div class="skeleton" style="width:40%;height:12px;margin-bottom:16px"></div>'+
+                '<div style="font-size:10px;color:#00c896;letter-spacing:1px;margin-bottom:8px" id="'+loadId+'">'+messages[0]+'</div>'+
+                '<div class="skeleton"></div>'+
+                '<div class="skeleton" style="width:90%"></div>'+
+                '<div class="skeleton" style="width:70%"></div>';
             grid.appendChild(card);
-            fetchStock(sym,card);
+
+            var msgTimer=setInterval(function(){
+                msgIdx=(msgIdx+1)%messages.length;
+                var el=document.getElementById(loadId);
+                if(el)el.textContent=messages[msgIdx];
+                else clearInterval(msgTimer);
+            },800);
+
+            fetchStock(sym,card,msgTimer);
         });
     }
 
-    function fetchStock(sym,card){
+    function fetchStock(sym,card,msgTimer){
         fetch('/api/stock?symbol='+sym)
             .then(function(r){return r.json();})
-            .then(function(d){renderCard(card,sym,d);})
-            .catch(function(){renderCard(card,sym,{price:'N/A',change:'0',summary:'Markets may be closed or data unavailable.'});});
+            .then(function(d){if(msgTimer)clearInterval(msgTimer);renderCard(card,sym,d);})
+            .catch(function(){if(msgTimer)clearInterval(msgTimer);renderCard(card,sym,{price:'N/A',change:'0',summary:'Markets may be closed or data unavailable.'});});
     }
 
     function renderCard(card,sym,d){

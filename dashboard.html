@@ -174,7 +174,7 @@
             <div class="topbar-title" id="viewTitle">Dashboard</div>
             <div class="topbar-date" id="currentDate"></div>
         </div>
-        <div class="status-badge"><span class="status-dot"></span> Live</div>
+        <div class="status-badge"><span class="status-dot"></span> Live · <span id="lastUpdated">updating...</span></div>
     </div>
 
     <div class="ticker">
@@ -299,6 +299,17 @@
     var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
     var now=new Date();
     document.getElementById('currentDate').textContent=days[now.getDay()]+' · '+months[now.getMonth()]+' '+now.getDate();
+    // Auto-load saved watchlist
+    var savedWatchlist=null;
+    try{savedWatchlist=JSON.parse(localStorage.getItem('clairo_watchlist'));}catch(e){}
+    if(savedWatchlist&&savedWatchlist.length){
+        savedWatchlist.forEach(function(sym,i){
+            var el=document.getElementById('s'+(i+1));
+            if(el)el.value=sym;
+        });
+        renderCards(savedWatchlist,'dashGrid');
+        document.getElementById('lastUpdated').textContent='updated just now';   
+    }
 
     // Custom cursor
     var cur=document.getElementById('cursor');
@@ -589,15 +600,18 @@ function drawMkt(){
     function quickAdd(sym){var s=['s1','s2','s3','s4','s5'];document.getElementById(s[slot%5]).value=sym;slot++;}
     function quickSearch(sym){document.getElementById('searchInput').value=sym;searchStock();}
     function updateWatchlist(){
+        var now2=new Date();
+        document.getElementById('lastUpdated').textContent='updated '+now2.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
         var syms=[];
         for(var i=1;i<=5;i++){var v=document.getElementById('s'+i).value.trim().toUpperCase();if(v)syms.push(v);}
         if(!syms.length)return;
-        var count = getSearchCount();
-        if(count >= FREE_LIMIT){
+        var count=getSearchCount();
+        if(count>=FREE_LIMIT){
             showUpgradeModal();
             return;
         }
         incrementSearch();
+        localStorage.setItem('clairo_watchlist',JSON.stringify(syms));
         renderCards(syms,'dashGrid');
     }
     var FREE_LIMIT = 5;
@@ -695,16 +709,37 @@ function drawMkt(){
     function renderCard(card,sym,d){
         var isUp=parseFloat(d.change)>=0;
         var cid='mc-'+sym+'-'+Date.now();
+
+        // Parse structured summary
+        var summary=d.summary||'';
+        var whatHappened='';var whyMoved='';var watch='';
+        var lines=summary.split('\n');
+        lines.forEach(function(line){
+            if(line.startsWith('WHAT HAPPENED:'))whatHappened=line.replace('WHAT HAPPENED:','').trim();
+            else if(line.startsWith('WHY IT MOVED:'))whyMoved=line.replace('WHY IT MOVED:','').trim();
+            else if(line.startsWith('WATCH:'))watch=line.replace('WATCH:','').trim();
+        });
+        if(!whatHappened)whatHappened=summary;
+
+        var showWatch=true;
+        var watchText=watch&&watch!==''?watch:'No major events upcoming — monitor price action.';
+        if(watch&&watch.toLowerCase().includes('nothing'))watchText='No major events upcoming — monitor price action.';
+
         card.innerHTML=
             '<div class="card-header">'+
-                '<div><div class="card-symbol">'+sym+'</div>'+
-                '<div class="card-price">$'+d.price+'</div>'+
-                '<div class="'+(isUp?'card-up':'card-down')+'">'+(isUp?'▲':'▼')+' '+d.change+'</div></div>'+
+                '<div>'+
+                    '<div class="card-symbol">'+sym+'</div>'+
+                    '<div class="card-price">$'+d.price+'</div>'+
+                    '<div class="'+(isUp?'card-up':'card-down')+'">'+(isUp?'▲':'▼')+' '+d.change+'</div>'+
+                '</div>'+
                 '<canvas class="mini-chart" id="'+cid+'"></canvas>'+
-            '</div><hr class="card-divider">'+
-            '<div class="card-summary">'+d.summary+'</div>';
+            '</div>'+
+            '<hr class="card-divider">'+
+            (whatHappened?'<div style="font-size:9px;color:#00c896;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">What happened</div><div class="card-summary" style="margin-bottom:10px">'+whatHappened+'</div>':'')+
+            (whyMoved?'<div style="font-size:9px;color:#00c896;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Why it moved</div><div class="card-summary" style="margin-bottom:10px">'+whyMoved+'</div>':'')+
+            '<div style="background:#0a0a0a;border:1px solid #1a1a1a;border-left:2px solid #00c896;border-radius:6px;padding:8px 10px;margin-top:4px"><div style="font-size:9px;color:#00c896;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px">Watch</div><div style="font-size:11px;color:#555;line-height:1.5">'+watchText+'</div></div>';
+
         drawMini(cid,isUp);
-        // re-add lock listener
         card.addEventListener('mouseover',function(){cur.classList.add('locked');ring.classList.add('locked');});
         card.addEventListener('mouseout',function(){cur.classList.remove('locked');ring.classList.remove('locked');});
     }

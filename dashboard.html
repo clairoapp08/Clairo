@@ -208,6 +208,7 @@
                 <input class="stock-input" id="s4" placeholder="e.g. GOOGL" maxlength="6"/>
                 <input class="stock-input" id="s5" placeholder="e.g. META" maxlength="6"/>
                 <button class="update-btn" onclick="updateWatchlist()">Update →</button>
+                <button class="update-btn" onclick="refreshWatchlist()" id="refreshBtn">Refresh ↺</button>
             </div>
             <div class="cards-grid" id="dashGrid">
                 <div class="empty-state">
@@ -599,6 +600,19 @@ function drawMkt(){
     var slot=0;
     function quickAdd(sym){var s=['s1','s2','s3','s4','s5'];document.getElementById(s[slot%5]).value=sym;slot++;}
     function quickSearch(sym){document.getElementById('searchInput').value=sym;searchStock();}
+    function refreshWatchlist(){
+        var saved=JSON.parse(localStorage.getItem('clairo_watchlist')||'[]');
+        if(!saved.length)return;
+        document.getElementById('refreshBtn').textContent='Refreshing...';
+        document.getElementById('refreshBtn').style.color='#00c896';
+        renderCards(saved,'dashGrid');
+        var now2=new Date();
+        document.getElementById('lastUpdated').textContent='updated '+now2.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+        setTimeout(function(){
+            document.getElementById('refreshBtn').textContent='Refresh ↺';
+            document.getElementById('refreshBtn').style.color='#333';
+        },3000);
+    }
     function updateWatchlist(){
         var now2=new Date();
         document.getElementById('lastUpdated').textContent='updated '+now2.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});

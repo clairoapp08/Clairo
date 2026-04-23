@@ -308,7 +308,7 @@
             if(el)el.value=sym;
         });
         renderCards(savedWatchlist,'dashGrid');
-        document.getElementById('lastUpdated').textContent='updated just now';   
+        document.getElementById('lastUpdated').textContent='updated just now';
     }
 
     // Custom cursor
@@ -617,8 +617,13 @@ function drawMkt(){
     var FREE_LIMIT = 5;
 
     function getSearchCount(){
-        var count = parseInt(localStorage.getItem('clairo_searches') || '0');
-        return count;
+        var today=new Date().toDateString();
+        var stored=localStorage.getItem('clairo_search_date');
+        if(stored!==today){
+            localStorage.setItem('clairo_searches','0');
+            localStorage.setItem('clairo_search_date',today);
+        }
+        return parseInt(localStorage.getItem('clairo_searches')||'0');
     }
 
     function incrementSearch(){

@@ -308,8 +308,18 @@
             var el=document.getElementById('s'+(i+1));
             if(el)el.value=sym;
         });
-        renderCards(savedWatchlist,'dashGrid');
-        document.getElementById('lastUpdated').textContent='updated just now';
+        // Auto-refresh on open
+        var lastRefresh=localStorage.getItem('clairo_last_refresh');
+        var now2=new Date();
+        var shouldRefresh=!lastRefresh||((now2-new Date(lastRefresh))>300000);
+        if(shouldRefresh){
+            localStorage.setItem('clairo_last_refresh',now2.toISOString());
+            renderCards(savedWatchlist,'dashGrid');
+            document.getElementById('lastUpdated').textContent='updated just now';
+        } else {
+            renderCards(savedWatchlist,'dashGrid');
+            document.getElementById('lastUpdated').textContent='updated '+new Date(lastRefresh).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+        }
     }
 
     // Custom cursor

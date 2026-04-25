@@ -94,8 +94,8 @@
         .stock-input { background: #0f0f0f; border: 1px solid #1a1a1a; border-radius: 6px; padding: 7px 10px; color: #fff; font-size: 12px; font-family: 'Inter', sans-serif; width: 80px; outline: none; text-transform: uppercase; letter-spacing: 1px; transition: border-color 0.2s; cursor: none; }
         .stock-input:focus { border-color: #00c896; }
         .stock-input::placeholder { color: #222; letter-spacing: 0; text-transform: none; font-size: 11px; }
-        .update-btn { background: transparent; border: 1px solid #1a1a1a; color: #333; padding: 7px 14px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: none; font-family: 'Inter', sans-serif; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s; }
-        .update-btn:hover { border-color: #00c896; color: #00c896; }
+        .update-btn { background: #00c896; border: 1px solid #00c896; color: #080808; padding: 7px 14px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: none; font-family: 'Inter', sans-serif; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s; }
+        .update-btn:hover { background: #00a87d; border-color: #00a87d; }
 
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
         .stock-card { background: #0f0f0f; border: 1px solid #1a1a1a; border-radius: 10px; padding: 20px; transition: border-color 0.2s; animation: cardIn 0.4s ease forwards; opacity: 0; }
@@ -208,8 +208,9 @@
                 <input class="stock-input" id="s4" placeholder="e.g. GOOGL" maxlength="6"/>
                 <input class="stock-input" id="s5" placeholder="e.g. META" maxlength="6"/>
                 <button class="update-btn" onclick="updateWatchlist()">Update →</button>
-                <button class="update-btn" onclick="refreshWatchlist()" id="refreshBtn">Refresh ↺</button>
+                <button class="update-btn" onclick="refreshWatchlist()" id="refreshBtn" style="background:transparent;border:1px solid #1a1a1a;color:#333;">Refresh ↺</button>
             </div>
+            <div style="font-size:10px;color:#333;margin-bottom:16px;letter-spacing:0.5px">← Enter up to 5 stock symbols above, then click <span style="color:#00c896;font-weight:700">Update →</span> to load your summaries</div>
             <div class="cards-grid" id="dashGrid">
                 <div class="empty-state">
                     <div style="font-size:10px;color:#00c896;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;animation:pulse 2s infinite">— Watchlist Empty —</div>

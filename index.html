@@ -268,6 +268,100 @@
             box-shadow: 0 0 6px rgba(0,200,150,0.4);
         }
 
+        /* ── SCROLLING TESTIMONIALS ── */
+        @keyframes scrollUp {
+            0%   { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+        .tcols-section {
+            padding: 100px 60px;
+            border-bottom: 1px solid #111;
+            overflow: hidden;
+        }
+        .tcols-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .tcols-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .tcols-title em { font-style: normal; color: #00c896; }
+        .tcols-sub { font-size: 14px; color: #444; }
+        .tcols-wrap {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-height: 560px;
+            overflow: hidden;
+        }
+        .tcols-fade-top {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 80px;
+            background: linear-gradient(to bottom, #080808, transparent);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .tcols-fade-bottom {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 80px;
+            background: linear-gradient(to top, #080808, transparent);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .tcol { overflow: hidden; }
+        .tcol-track {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: scrollUp linear infinite;
+        }
+        .tcard {
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            transition: border-color 0.3s;
+        }
+        .tcard:hover { border-color: rgba(0,200,150,0.2); }
+        .tcard-green {
+            border-color: rgba(0,200,150,0.15);
+            background: linear-gradient(135deg, #0d0d0d, #0d120f);
+        }
+        .tcard-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .tcard-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tcard-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #00c896;
+            flex-shrink: 0;
+        }
+        .tcard-name { font-size: 12px; font-weight: 600; color: #fff; }
+        .tcard-role { font-size: 11px; color: #333; margin-top: 2px; }
+
         /* ── GRADIENT CARD MOCK EFFECTS ── */
         .gc-card {
             position: relative;
@@ -702,37 +796,56 @@
         </div>
     </div>
 
-    <section class="section" style="border-bottom: 1px solid #111;">
-        <div class="section-tag scroll-reveal">What people are saying</div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 0;">
-            <div class="slide-left" style="background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-                <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"so i literally just started investing like 2 months ago and had no idea what any of it meant. searched NVDA this morning and it actually told me WHY it went up. first time i actually understood what was happening lol"</div>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">J</div>
-                    <div>
-                        <div style="font-size: 12px; font-weight: 600; color: #fff;">Jake R.</div>
-                        <div style="font-size: 11px; color: #333;">College student, 20</div>
-                    </div>
+    <!-- SCROLLING TESTIMONIALS COLUMNS -->
+    <section class="tcols-section">
+        <div class="tcols-header scroll-reveal">
+            <div class="section-tag" style="margin-bottom:16px;">What people are saying</div>
+            <div class="tcols-title">Real people. <em>Real results.</em></div>
+            <p class="tcols-sub">Early users who tried Clairo during beta access.</p>
+        </div>
+
+        <div class="tcols-wrap">
+            <!-- fade top/bottom -->
+            <div class="tcols-fade-top"></div>
+            <div class="tcols-fade-bottom"></div>
+
+            <!-- Column 1 — scrolls up at speed A -->
+            <div class="tcol">
+                <div class="tcol-track" style="animation-duration:18s">
+                    <!-- cards duplicated for infinite loop -->
+                    <div class="tcard"><p class="tcard-text">"searched NVDA this morning and it actually told me WHY it went up. first time i actually understood what was happening lol"</p><div class="tcard-author"><div class="tcard-avatar">J</div><div><div class="tcard-name">Jake R.</div><div class="tcard-role">College student, 20</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"clairo just tells me straight up what happened and what to look for. wish i had this when i started investing"</p><div class="tcard-author"><div class="tcard-avatar">M</div><div><div class="tcard-name">Maya T.</div><div class="tcard-role">First-time investor, 22</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"i check it every morning before school now. takes like 2 minutes and i actually know what's going on with my stocks"</p><div class="tcard-author"><div class="tcard-avatar">A</div><div><div class="tcard-name">Alex P.</div><div class="tcard-role">Student investor, 21</div></div></div></div>
+                    <!-- duplicate -->
+                    <div class="tcard"><p class="tcard-text">"searched NVDA this morning and it actually told me WHY it went up. first time i actually understood what was happening lol"</p><div class="tcard-author"><div class="tcard-avatar">J</div><div><div class="tcard-name">Jake R.</div><div class="tcard-role">College student, 20</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"clairo just tells me straight up what happened and what to look for. wish i had this when i started investing"</p><div class="tcard-author"><div class="tcard-avatar">M</div><div><div class="tcard-name">Maya T.</div><div class="tcard-role">First-time investor, 22</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"i check it every morning before school now. takes like 2 minutes and i actually know what's going on with my stocks"</p><div class="tcard-author"><div class="tcard-avatar">A</div><div><div class="tcard-name">Alex P.</div><div class="tcard-role">Student investor, 21</div></div></div></div>
                 </div>
             </div>
-            <div class="scroll-reveal" style="transition-delay: 0.1s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-                <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"been using robinhood for a year and never really knew if i should be worried or not about my stocks. clairo just tells me straight up what happened and what to look for. wish i had this when i started"</div>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">M</div>
-                    <div>
-                        <div style="font-size: 12px; font-weight: 600; color: #fff;">Maya T.</div>
-                        <div style="font-size: 11px; color: #333;">First-time investor, 22</div>
-                    </div>
+
+            <!-- Column 2 — scrolls up slower -->
+            <div class="tcol">
+                <div class="tcol-track" style="animation-duration:24s">
+                    <div class="tcard"><p class="tcard-text">"my finance class doesn't even explain things this clearly. typed in AAPL and actually knew what was going on by first period"</p><div class="tcard-author"><div class="tcard-avatar">D</div><div><div class="tcard-name">Devon K.</div><div class="tcard-role">Part-time investor, 19</div></div></div></div>
+                    <div class="tcard tcard-green"><p class="tcard-text">"finally something that doesn't make me feel stupid about investing. the summaries are so clear and actually useful"</p><div class="tcard-author"><div class="tcard-avatar">S</div><div><div class="tcard-name">Sofia L.</div><div class="tcard-role">New investor, 23</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"been investing for 6 months and always felt like i was guessing. clairo actually explains the why behind price moves"</p><div class="tcard-author"><div class="tcard-avatar">R</div><div><div class="tcard-name">Ryan M.</div><div class="tcard-role">Beginner investor, 24</div></div></div></div>
+                    <!-- duplicate -->
+                    <div class="tcard"><p class="tcard-text">"my finance class doesn't even explain things this clearly. typed in AAPL and actually knew what was going on by first period"</p><div class="tcard-author"><div class="tcard-avatar">D</div><div><div class="tcard-name">Devon K.</div><div class="tcard-role">Part-time investor, 19</div></div></div></div>
+                    <div class="tcard tcard-green"><p class="tcard-text">"finally something that doesn't make me feel stupid about investing. the summaries are so clear and actually useful"</p><div class="tcard-author"><div class="tcard-avatar">S</div><div><div class="tcard-name">Sofia L.</div><div class="tcard-role">New investor, 23</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"been investing for 6 months and always felt like i was guessing. clairo actually explains the why behind price moves"</p><div class="tcard-author"><div class="tcard-avatar">R</div><div><div class="tcard-name">Ryan M.</div><div class="tcard-role">Beginner investor, 24</div></div></div></div>
                 </div>
             </div>
-            <div class="slide-right" style="transition-delay: 0.2s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-                <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"my finance class doesn't even explain things this clearly. typed in AAPL before school and actually knew what was going on by the time i got to first period. showing everyone this"</div>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">D</div>
-                    <div>
-                        <div style="font-size: 12px; font-weight: 600; color: #fff;">Devon K.</div>
-                        <div style="font-size: 11px; color: #333;">Part-time investor, 19</div>
-                    </div>
+
+            <!-- Column 3 — scrolls up fastest -->
+            <div class="tcol">
+                <div class="tcol-track" style="animation-duration:20s">
+                    <div class="tcard"><p class="tcard-text">"used to just stare at red and green numbers not knowing what to do. now i actually understand what's happening each day"</p><div class="tcard-author"><div class="tcard-avatar">K</div><div><div class="tcard-name">Kayla B.</div><div class="tcard-role">Robinhood user, 22</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"the plain english thing is real. it doesn't talk to you like you're dumb but it actually explains everything simply"</p><div class="tcard-author"><div class="tcard-avatar">T</div><div><div class="tcard-name">Tyler H.</div><div class="tcard-role">Self-taught investor, 25</div></div></div></div>
+                    <div class="tcard tcard-green"><p class="tcard-text">"showed this to my roommate and now we both use it every morning. it's become part of our routine honestly"</p><div class="tcard-author"><div class="tcard-avatar">C</div><div><div class="tcard-name">Chris W.</div><div class="tcard-role">College senior, 21</div></div></div></div>
+                    <!-- duplicate -->
+                    <div class="tcard"><p class="tcard-text">"used to just stare at red and green numbers not knowing what to do. now i actually understand what's happening each day"</p><div class="tcard-author"><div class="tcard-avatar">K</div><div><div class="tcard-name">Kayla B.</div><div class="tcard-role">Robinhood user, 22</div></div></div></div>
+                    <div class="tcard"><p class="tcard-text">"the plain english thing is real. it doesn't talk to you like you're dumb but it actually explains everything simply"</p><div class="tcard-author"><div class="tcard-avatar">T</div><div><div class="tcard-name">Tyler H.</div><div class="tcard-role">Self-taught investor, 25</div></div></div></div>
+                    <div class="tcard tcard-green"><p class="tcard-text">"showed this to my roommate and now we both use it every morning. it's become part of our routine honestly"</p><div class="tcard-author"><div class="tcard-avatar">C</div><div><div class="tcard-name">Chris W.</div><div class="tcard-role">College senior, 21</div></div></div></div>
                 </div>
             </div>
         </div>

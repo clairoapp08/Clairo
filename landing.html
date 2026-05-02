@@ -16,7 +16,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #080808; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
- 
+
         nav {
             display: flex;
             justify-content: space-between;
@@ -36,7 +36,7 @@
         .status-dot { width: 5px; height: 5px; background: #00c896; border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         .nav-btn { background: #fff; color: #080808; padding: 8px 20px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
- 
+
         .ticker {
             background: rgba(10,10,10,0.7);
             border-bottom: 1px solid #111;
@@ -51,7 +51,7 @@
         .ticker-symbol { color: #fff; font-weight: 700; }
         .ticker-up { color: #00c896; }
         .ticker-down { color: #ff4d4d; }
- 
+
         /* ── SHADER HERO WRAPPER ── */
         .shader-hero-wrapper {
             position: relative;
@@ -60,7 +60,7 @@
             overflow: hidden;
             margin-top: 65px;
         }
- 
+
         #shaderCanvas {
             position: absolute;
             inset: 0;
@@ -69,7 +69,7 @@
             display: block;
             touch-action: none;
         }
- 
+
         .shader-overlay {
             position: absolute;
             inset: 0;
@@ -82,7 +82,7 @@
             );
             z-index: 2;
         }
- 
+
         .hero {
             position: relative;
             z-index: 10;
@@ -105,7 +105,7 @@
         .btn-secondary { background: transparent; color: #aaa; padding: 14px 28px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid #222; cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color 0.2s, color 0.2s; }
         .btn-secondary:hover { border-color: #444; color: #fff; }
         .hero-note { font-size: 11px; color: #444; opacity: 0; animation: fadeUp 0.8s ease forwards 1.1s; }
- 
+
         .dashboard-mock { background: rgba(13,13,13,0.85); backdrop-filter: blur(16px); border: 1px solid #1e1e1e; border-radius: 12px; overflow: hidden; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s, floatMock 6s ease-in-out 1.5s infinite; }
         @keyframes floatMock { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
         .mock-header { padding: 16px 20px; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; gap: 8px; }
@@ -121,49 +121,49 @@
         .mock-change-up { font-size: 11px; font-weight: 600; color: #00c896; margin-bottom: 10px; }
         .mock-change-down { font-size: 11px; font-weight: 600; color: #ff4d4d; margin-bottom: 10px; }
         .mock-summary { font-size: 10px; color: #333; line-height: 1.5; border-top: 1px solid #1a1a1a; padding-top: 8px; }
- 
+
         .divider { border: none; border-top: 1px solid #111; }
- 
+
         .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #111; }
         .stat { padding: 48px 60px; border-right: 1px solid #111; }
         .stat:last-child { border-right: none; }
         .stat-num { font-size: 56px; font-weight: 900; letter-spacing: -3px; color: #fff; line-height: 1; margin-bottom: 8px; }
         .stat-num em { font-style: normal; color: #00c896; font-size: 32px; letter-spacing: 0; }
         .stat-label { font-size: 11px; color: #333; letter-spacing: 1px; text-transform: uppercase; }
- 
+
         .scroll-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
         .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
         .slide-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
         .slide-left.revealed { opacity: 1; transform: translateX(0); }
         .slide-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
         .slide-right.revealed { opacity: 1; transform: translateX(0); }
- 
+
         .section { padding: 100px 60px; border-bottom: 1px solid #111; }
         .section-tag { font-size: 11px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 60px; }
         .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
         .section-title { font-size: 48px; font-weight: 800; letter-spacing: -2px; line-height: 1.05; }
         .section-title em { font-style: normal; color: #00c896; }
- 
+
         .chart-container { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 24px; margin-bottom: 32px; }
         .chart-label { font-size: 10px; color: #444; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; justify-content: space-between; }
         .chart-price { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px; }
         .chart-change { font-size: 12px; color: #00c896; margin-bottom: 16px; }
         svg.chart { width: 100%; height: 80px; }
- 
+
         .steps { display: flex; flex-direction: column; }
         .step { display: flex; gap: 24px; align-items: flex-start; padding: 28px 0; border-bottom: 1px solid #111; }
         .step:first-child { border-top: 1px solid #111; }
         .step-num { font-size: 11px; color: #333; letter-spacing: 1px; min-width: 24px; padding-top: 2px; }
         .step-content h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
         .step-content p { font-size: 13px; color: #444; line-height: 1.6; }
- 
+
         .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #111; }
         .feature { padding: 48px 40px; border-right: 1px solid #111; border-bottom: 1px solid #111; }
         .feature:nth-child(3n) { border-right: none; }
         .feature-tag { font-size: 11px; color: #00c896; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
         .feature h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
         .feature p { font-size: 13px; color: #444; line-height: 1.7; }
- 
+
         .cta-section { padding: 120px 60px; border-bottom: 1px solid #111; }
         .cta-label { font-size: 11px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 32px; }
         .cta-title { font-size: 72px; font-weight: 900; letter-spacing: -3px; line-height: 0.95; margin-bottom: 48px; max-width: 700px; }
@@ -173,9 +173,84 @@
         .email-form input::placeholder { color: #333; }
         .form-note { font-size: 11px; color: #333; margin-top: 12px; }
         .success-msg { display: none; color: #00c896; font-size: 13px; margin-top: 12px; }
- 
+
         footer { padding: 32px 60px; display: flex; justify-content: space-between; align-items: center; color: #222; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
- 
+
+        /* ── GRADIENT CARD MOCK EFFECTS ── */
+        .gc-card {
+            position: relative;
+            background: linear-gradient(180deg, #111 0%, #0a0a0a 100%) !important;
+            box-shadow: 0 -8px 40px 4px rgba(0,200,150,0.08), 0 0 8px rgba(0,0,0,0.4);
+            transform-style: preserve-3d;
+            transition: transform 0.12s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        .gc-card:hover {
+            box-shadow: 0 -10px 50px 6px rgba(0,200,150,0.15), 0 0 12px rgba(0,0,0,0.5);
+            transform: translateY(-3px) scale(1.01);
+        }
+        /* bottom glow — green for up, red for down */
+        .gc-bottom-glow {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 55%;
+            background:
+                radial-gradient(ellipse at bottom right, rgba(0,200,150,0.35) -10%, transparent 65%),
+                radial-gradient(ellipse at bottom left,  rgba(0,200,150,0.35) -10%, transparent 65%);
+            filter: blur(18px);
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.3s;
+        }
+        .gc-glow-red {
+            background:
+                radial-gradient(ellipse at bottom right, rgba(255,77,77,0.3) -10%, transparent 65%),
+                radial-gradient(ellipse at bottom left,  rgba(255,77,77,0.3) -10%, transparent 65%) !important;
+        }
+        /* glowing bottom edge line */
+        .gc-bottom-edge {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(0,200,150,0.6) 50%, transparent 100%);
+            box-shadow: 0 0 8px 2px rgba(0,200,150,0.3);
+            pointer-events: none;
+            z-index: 2;
+        }
+        /* left + right corner edge fades */
+        .gc-left-edge {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 1px; height: 35%;
+            background: linear-gradient(to top, rgba(0,200,150,0.5) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+        .gc-right-edge {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 1px; height: 35%;
+            background: linear-gradient(to top, rgba(0,200,150,0.5) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+        /* subtle noise texture for depth */
+        .gc-noise {
+            position: absolute;
+            inset: 0;
+            opacity: 0.025;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* ensure mock content sits above effects */
+        .gc-card .mock-symbol,
+        .gc-card .mock-price,
+        .gc-card .mock-change-up,
+        .gc-card .mock-change-down,
+        .gc-card .mock-summary { position: relative; z-index: 3; }
+
         /* ── HOLOGRAPHIC FEATURE CARDS ── */
         .holo-features-section {
             display: grid;
@@ -267,7 +342,7 @@
             border-color: rgba(0,200,150,0.15);
             color: #666;
         }
- 
+
         * { cursor: none; }
         #cursor { position: fixed; width: 12px; height: 12px; background: #00c896; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); box-shadow: 0 0 8px rgba(0,200,150,0.6); transition: width 0.2s, height 0.2s; }
         #cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(0,200,150,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s, border-color 0.3s; }
@@ -279,7 +354,7 @@
 <body>
     <div id="cursor"></div>
     <div id="cursor-ring"></div>
- 
+
     <nav>
         <div class="logo">Clairo</div>
         <div class="nav-right">
@@ -287,12 +362,12 @@
             <a href="https://clairo-app.up.railway.app" class="nav-btn" target="_blank">Try Clairo →</a>
         </div>
     </nav>
- 
+
     <!-- SHADER HERO: everything inside shares the WebGL background -->
     <div class="shader-hero-wrapper">
         <canvas id="shaderCanvas"></canvas>
         <div class="shader-overlay"></div>
- 
+
         <!-- ticker floats on top of shader -->
         <div class="ticker">
             <div class="ticker-track">
@@ -314,7 +389,7 @@
                 <span class="ticker-item"><span class="ticker-symbol">SPY</span> $521.40 <span class="ticker-up">▲ 0.98%</span></span>
             </div>
         </div>
- 
+
         <!-- hero content -->
         <section class="hero">
             <div class="hero-left">
@@ -336,25 +411,45 @@
                     <div class="mock-subtitle">— live market digest</div>
                 </div>
                 <div class="mock-body">
-                    <div class="mock-card" id="card1">
+                    <div class="mock-card gc-card" id="card1">
+                        <div class="gc-bottom-glow"></div>
+                        <div class="gc-left-edge"></div>
+                        <div class="gc-right-edge"></div>
+                        <div class="gc-bottom-edge"></div>
+                        <div class="gc-noise"></div>
                         <div class="mock-symbol">AAPL</div>
                         <div class="mock-price">$270.23</div>
                         <div class="mock-change-up">▲ 2.59%</div>
                         <div class="mock-summary">Apple rose today driven by strong AI product momentum. Investors remain bullish heading into earnings.</div>
                     </div>
-                    <div class="mock-card" id="card2">
+                    <div class="mock-card gc-card" id="card2">
+                        <div class="gc-bottom-glow gc-glow-red"></div>
+                        <div class="gc-left-edge"></div>
+                        <div class="gc-right-edge"></div>
+                        <div class="gc-bottom-edge"></div>
+                        <div class="gc-noise"></div>
                         <div class="mock-symbol">TSLA</div>
                         <div class="mock-price">$388.90</div>
                         <div class="mock-change-down">▼ 0.78%</div>
                         <div class="mock-summary">Tesla slipped slightly amid broader market pressure. Monitor for delivery data next week.</div>
                     </div>
-                    <div class="mock-card" id="card3">
+                    <div class="mock-card gc-card" id="card3">
+                        <div class="gc-bottom-glow"></div>
+                        <div class="gc-left-edge"></div>
+                        <div class="gc-right-edge"></div>
+                        <div class="gc-bottom-edge"></div>
+                        <div class="gc-noise"></div>
                         <div class="mock-symbol">NVDA</div>
                         <div class="mock-price">$198.35</div>
                         <div class="mock-change-up">▲ 1.20%</div>
                         <div class="mock-summary">Nvidia gained on continued AI chip demand. Partnership news signals expanding robotics play.</div>
                     </div>
-                    <div class="mock-card" id="card4">
+                    <div class="mock-card gc-card" id="card4">
+                        <div class="gc-bottom-glow"></div>
+                        <div class="gc-left-edge"></div>
+                        <div class="gc-right-edge"></div>
+                        <div class="gc-bottom-edge"></div>
+                        <div class="gc-noise"></div>
                         <div class="mock-symbol">META</div>
                         <div class="mock-price">$676.87</div>
                         <div class="mock-change-up">▲ 0.79%</div>
@@ -365,9 +460,9 @@
         </section>
     </div>
     <!-- END SHADER HERO -->
- 
+
     <hr class="divider">
- 
+
     <div class="stats">
         <div class="stat scroll-reveal">
             <div class="stat-num"><span class="count" data-target="5">0</span><em>min</em></div>
@@ -386,7 +481,7 @@
             <div class="stat-label">Cost to get started</div>
         </div>
     </div>
- 
+
     <section class="section">
         <div class="section-tag scroll-reveal">How it works</div>
         <div class="section-grid">
@@ -438,7 +533,7 @@
             </div>
         </div>
     </section>
- 
+
     <!-- HOLOGRAPHIC FEATURE CARDS -->
     <div class="holo-features-section">
         <div class="holo-card-wrap scroll-reveal">
@@ -487,7 +582,7 @@
             </div>
         </div>
     </div>
- 
+
     <section class="section" style="border-bottom: 1px solid #111;">
         <div class="section-tag scroll-reveal">What people are saying</div>
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 0;">
@@ -523,7 +618,7 @@
             </div>
         </div>
     </section>
- 
+
     <section class="cta-section scroll-reveal" id="waitlist">
         <div class="cta-label">Early access</div>
         <div style="font-size:11px;color:#444;margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:1px;text-transform:uppercase;">
@@ -537,21 +632,21 @@
         <div class="form-note">No card required. Free during early access.</div>
         <div class="success-msg" id="successMsg">You are on the waitlist. We will be in touch.</div>
     </section>
- 
+
     <footer>
         <div>Clairo</div>
         <div>© 2026 — Not financial advice</div>
     </footer>
- 
+
     <script>
     // ── WebGL SHADER BACKGROUND (Clairo green palette) ──
     (function() {
         var canvas = document.getElementById('shaderCanvas');
         var gl = canvas.getContext('webgl2');
         if (!gl) return;
- 
+
         var vertSrc = '#version 300 es\nprecision highp float;\nin vec4 position;\nvoid main(){gl_Position=position;}';
- 
+
         var fragSrc = `#version 300 es
 precision highp float;
 out vec4 O;
@@ -561,7 +656,7 @@ uniform float time;
 #define T time
 #define R resolution
 #define MN min(R.x,R.y)
- 
+
 float rnd(vec2 p){
   p=fract(p*vec2(12.9898,78.233));
   p+=dot(p,p+34.56);
@@ -608,7 +703,7 @@ void main(void){
   col*=0.5;
   O=vec4(col,1);
 }`;
- 
+
         function makeShader(type, src) {
             var s = gl.createShader(type);
             gl.shaderSource(s, src);
@@ -619,26 +714,26 @@ void main(void){
             }
             return s;
         }
- 
+
         var vs = makeShader(gl.VERTEX_SHADER, vertSrc);
         var fs = makeShader(gl.FRAGMENT_SHADER, fragSrc);
         if (!vs || !fs) return;
- 
+
         var prog = gl.createProgram();
         gl.attachShader(prog, vs); gl.attachShader(prog, fs);
         gl.linkProgram(prog);
         if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.warn('Link error'); return; }
- 
+
         var buf = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buf);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,-1,-1,1,1,1,-1]), gl.STATIC_DRAW);
         var pos = gl.getAttribLocation(prog, 'position');
         gl.enableVertexAttribArray(pos);
         gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
- 
+
         var uRes  = gl.getUniformLocation(prog, 'resolution');
         var uTime = gl.getUniformLocation(prog, 'time');
- 
+
         function resize() {
             var dpr = Math.max(1, window.devicePixelRatio * 0.65);
             canvas.width  = window.innerWidth * dpr;
@@ -647,7 +742,7 @@ void main(void){
         }
         resize();
         window.addEventListener('resize', resize);
- 
+
         function loop(now) {
             gl.useProgram(prog);
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -658,7 +753,7 @@ void main(void){
         }
         requestAnimationFrame(loop);
     })();
- 
+
     // ── TYPING ANIMATION ──
     var lines = ["Stop guessing.", "Start knowing."];
     var lineIndex = 0, charIndex = 0;
@@ -682,19 +777,19 @@ void main(void){
     }
     setTimeout(type, 600);
     setInterval(function(){ cursorEl.style.opacity = cursorEl.style.opacity === '0' ? '1' : '0'; }, 500);
- 
+
     // ── MOCK CARDS ──
     setTimeout(function(){ document.getElementById('card1').classList.add('visible'); }, 1000);
     setTimeout(function(){ document.getElementById('card2').classList.add('visible'); }, 1300);
     setTimeout(function(){ document.getElementById('card3').classList.add('visible'); }, 1600);
     setTimeout(function(){ document.getElementById('card4').classList.add('visible'); }, 1900);
- 
+
     // ── SCROLL REVEAL ──
     var ro = new IntersectionObserver(function(entries){
         entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('revealed'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.scroll-reveal,.slide-left,.slide-right').forEach(function(el){ ro.observe(el); });
- 
+
     // ── COUNT UP ──
     var counted = false;
     new IntersectionObserver(function(entries){
@@ -708,7 +803,7 @@ void main(void){
             });
         }
     }).observe(document.querySelector('.stats'));
- 
+
     // ── CHART LINE ANIMATION ──
     new IntersectionObserver(function(entries){
         if(entries[0].isIntersecting){
@@ -721,7 +816,7 @@ void main(void){
             }, 16);
         }
     }, {threshold:0.3}).observe(document.querySelector('.chart-container'));
- 
+
     // ── TICKER FLUCTUATION ──
     setInterval(function(){
         document.querySelectorAll('.ticker-item').forEach(function(item){
@@ -732,7 +827,7 @@ void main(void){
             }
         });
     }, 2000);
- 
+
     // ── WAITLIST ──
     async function joinWaitlist() {
         var email = document.getElementById('emailInput').value;
@@ -750,7 +845,24 @@ void main(void){
             alert('Please enter a valid email.');
         }
     }
- 
+
+    // ── GRADIENT CARD 3D TILT (mock cards) ──
+    document.querySelectorAll('.gc-card').forEach(function(card) {
+        card.addEventListener('mousemove', function(e) {
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var cx = rect.width / 2;
+            var cy = rect.height / 2;
+            var rotX = ((y - cy) / cy) * 5;
+            var rotY = ((cx - x) / cx) * 5;
+            card.style.transform = 'perspective(800px) rotateX('+rotX+'deg) rotateY('+rotY+'deg) translateY(-3px) scale(1.01)';
+        });
+        card.addEventListener('mouseleave', function() {
+            card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+        });
+    });
+
     // ── HOLOGRAPHIC CARD TILT ──
     document.querySelectorAll('.holo-card').forEach(function(card) {
         card.addEventListener('mousemove', function(e) {
@@ -771,7 +883,7 @@ void main(void){
             card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
         });
     });
- 
+
     // ── CUSTOM CURSOR ──
     var cur = document.getElementById('cursor');
     var ring = document.getElementById('cursor-ring');

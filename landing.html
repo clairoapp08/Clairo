@@ -940,32 +940,29 @@ void main(void){
     }, { threshold: 0.1 });
     document.querySelectorAll('.scroll-reveal,.slide-left,.slide-right').forEach(function(el){ ro.observe(el); });
 
-    // ── COUNT UP ──
-    var counted = false;
-    new IntersectionObserver(function(entries){
-        if(entries[0].isIntersecting && !counted){
-            counted = true;
-            document.querySelectorAll('.count').forEach(function(el){
-                var target = parseInt(el.dataset.target);
-                if(target === 0){ el.textContent='0'; return; }
-                var n = 0;
-                var t = setInterval(function(){ n++; el.textContent=n; if(n>=target) clearInterval(t); }, 200);
-            });
-        }
-    }).observe(document.querySelector('.stats'));
+    // ── COUNT UP (legacy - no longer needed but kept safe) ──
 
     // ── CHART LINE ANIMATION ──
-    new IntersectionObserver(function(entries){
-        if(entries[0].isIntersecting){
-            document.getElementById('chartFill').style.cssText += 'opacity:1;transition:opacity 1s ease;';
-            var p = 500;
-            var t = setInterval(function(){
-                p -= 8;
-                document.getElementById('chartLine').style.strokeDashoffset = p;
-                if(p<=0) clearInterval(t);
-            }, 16);
-        }
-    }, {threshold:0.3}).observe(document.querySelector('.chart-container'));
+    var chartContainer = document.querySelector('.chart-container');
+    if(chartContainer){
+        var chartDone = false;
+        new IntersectionObserver(function(entries){
+            if(entries[0].isIntersecting && !chartDone){
+                chartDone = true;
+                var fillEl = document.getElementById('chartFill');
+                var lineEl = document.getElementById('chartLine');
+                if(fillEl) { fillEl.style.opacity='1'; fillEl.style.transition='opacity 1s ease'; }
+                if(lineEl){
+                    var p = 500;
+                    var t = setInterval(function(){
+                        p -= 8;
+                        lineEl.style.strokeDashoffset = p;
+                        if(p<=0) clearInterval(t);
+                    }, 16);
+                }
+            }
+        }, {threshold:0.3}).observe(chartContainer);
+    }
 
     // ── TICKER FLUCTUATION ──
     setInterval(function(){
@@ -1038,11 +1035,23 @@ void main(void){
     var cur = document.getElementById('cursor');
     var ring = document.getElementById('cursor-ring');
     var mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-    (function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
-    var lockSel = '.btn-primary,.btn-secondary,.nav-btn,.feature,.stat,.slide-left,.scroll-reveal,.slide-right';
-    document.addEventListener('mouseover', function(e){ if(e.target.closest(lockSel)){ cur.classList.add('locked'); ring.classList.add('locked'); } });
-    document.addEventListener('mouseout',  function(e){ if(e.target.closest(lockSel)){ cur.classList.remove('locked'); ring.classList.remove('locked'); } });
+    document.addEventListener('mousemove', function(e){
+        mx=e.clientX; my=e.clientY;
+        cur.style.left=mx+'px'; cur.style.top=my+'px';
+    });
+    (function animRing(){
+        rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+        ring.style.left=rx+'px'; ring.style.top=ry+'px';
+        requestAnimationFrame(animRing);
+    })();
+    // Only lock on interactive elements — NOT scroll-reveal which is on everything
+    var lockSel = '.btn-primary,.btn-secondary,.nav-btn,.holo-card,.pstat,.gc-card';
+    document.addEventListener('mouseover', function(e){
+        if(e.target.closest(lockSel)){ cur.classList.add('locked'); ring.classList.add('locked'); }
+    });
+    document.addEventListener('mouseout', function(e){
+        if(e.target.closest(lockSel)){ cur.classList.remove('locked'); ring.classList.remove('locked'); }
+    });
     </script>
 </body>
 </html>

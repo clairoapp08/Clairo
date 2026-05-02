@@ -176,6 +176,98 @@
 
         footer { padding: 32px 60px; display: flex; justify-content: space-between; align-items: center; color: #222; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
 
+        /* ── PREMIUM STATS ROW ── */
+        .pstats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 48px 60px;
+            background: #080808;
+            border-bottom: 1px solid #111;
+        }
+        .pstat {
+            position: relative;
+            background: linear-gradient(145deg, #0f0f0f 0%, #0a0a0a 100%);
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 36px 32px 28px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+            cursor: default;
+        }
+        .pstat:hover {
+            border-color: rgba(0,200,150,0.25);
+            transform: translateY(-4px);
+        }
+        .pstat-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 120%, rgba(0,200,150,0.08) 0%, transparent 65%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .pstat:hover .pstat-glow { opacity: 1; }
+        .pstat-bottom-edge {
+            position: absolute;
+            bottom: 0; left: 15%; right: 15%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,200,150,0.5), transparent);
+            box-shadow: 0 0 8px 1px rgba(0,200,150,0.2);
+        }
+        .pstat-left-edge {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 1px; height: 40%;
+            background: linear-gradient(to top, rgba(0,200,150,0.4), transparent);
+        }
+        .pstat-right-edge {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 1px; height: 40%;
+            background: linear-gradient(to top, rgba(0,200,150,0.4), transparent);
+        }
+        .pstat-inner { position: relative; z-index: 2; }
+        .pstat-num {
+            font-size: 52px;
+            font-weight: 900;
+            letter-spacing: -3px;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .pstat-unit {
+            font-size: 16px;
+            font-weight: 500;
+            color: #00c896;
+            letter-spacing: 0;
+            opacity: 0.8;
+        }
+        .pstat-label {
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .pstat-bar {
+            height: 2px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .pstat-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00c896, rgba(0,200,150,0.3));
+            border-radius: 2px;
+            transition: width 1.5s ease;
+            box-shadow: 0 0 6px rgba(0,200,150,0.4);
+        }
+
         /* ── GRADIENT CARD MOCK EFFECTS ── */
         .gc-card {
             position: relative;
@@ -461,24 +553,51 @@
     </div>
     <!-- END SHADER HERO -->
 
-    <hr class="divider">
-
-    <div class="stats">
-        <div class="stat scroll-reveal">
-            <div class="stat-num"><span class="count" data-target="5">0</span><em>min</em></div>
-            <div class="stat-label">Daily review time</div>
+    <!-- PREMIUM STATS ROW -->
+    <div class="pstats-row">
+        <div class="pstat scroll-reveal" style="transition-delay:0s">
+            <div class="pstat-glow"></div>
+            <div class="pstat-bottom-edge"></div>
+            <div class="pstat-left-edge"></div>
+            <div class="pstat-right-edge"></div>
+            <div class="pstat-inner">
+                <div class="pstat-num"><span class="pcount" data-target="5">0</span><span class="pstat-unit">min</span></div>
+                <div class="pstat-label">Daily review time</div>
+                <div class="pstat-bar"><div class="pstat-bar-fill"></div></div>
+            </div>
         </div>
-        <div class="stat scroll-reveal" style="transition-delay:0.1s">
-            <div class="stat-num">∞</div>
-            <div class="stat-label">Stocks you can track</div>
+        <div class="pstat scroll-reveal" style="transition-delay:0.1s">
+            <div class="pstat-glow"></div>
+            <div class="pstat-bottom-edge"></div>
+            <div class="pstat-left-edge"></div>
+            <div class="pstat-right-edge"></div>
+            <div class="pstat-inner">
+                <div class="pstat-num">∞</div>
+                <div class="pstat-label">Stocks you can track</div>
+                <div class="pstat-bar"><div class="pstat-bar-fill" style="width:100%"></div></div>
+            </div>
         </div>
-        <div class="stat scroll-reveal" style="transition-delay:0.2s">
-            <div class="stat-num"><span class="count" data-target="3">0</span></div>
-            <div class="stat-label">Sentences per summary</div>
+        <div class="pstat scroll-reveal" style="transition-delay:0.2s">
+            <div class="pstat-glow"></div>
+            <div class="pstat-bottom-edge"></div>
+            <div class="pstat-left-edge"></div>
+            <div class="pstat-right-edge"></div>
+            <div class="pstat-inner">
+                <div class="pstat-num"><span class="pcount" data-target="3">0</span><span class="pstat-unit">sentences</span></div>
+                <div class="pstat-label">Per stock summary</div>
+                <div class="pstat-bar"><div class="pstat-bar-fill"></div></div>
+            </div>
         </div>
-        <div class="stat scroll-reveal" style="transition-delay:0.3s">
-            <div class="stat-num">$<span class="count" data-target="0">0</span></div>
-            <div class="stat-label">Cost to get started</div>
+        <div class="pstat scroll-reveal" style="transition-delay:0.3s">
+            <div class="pstat-glow"></div>
+            <div class="pstat-bottom-edge"></div>
+            <div class="pstat-left-edge"></div>
+            <div class="pstat-right-edge"></div>
+            <div class="pstat-inner">
+                <div class="pstat-num">$<span class="pcount" data-target="0">0</span></div>
+                <div class="pstat-label">Cost to get started</div>
+                <div class="pstat-bar"><div class="pstat-bar-fill" style="width:30%"></div></div>
+            </div>
         </div>
     </div>
 
@@ -783,6 +902,37 @@ void main(void){
     setTimeout(function(){ document.getElementById('card2').classList.add('visible'); }, 1300);
     setTimeout(function(){ document.getElementById('card3').classList.add('visible'); }, 1600);
     setTimeout(function(){ document.getElementById('card4').classList.add('visible'); }, 1900);
+
+    // ── PREMIUM STATS COUNT UP ──
+    var pStatsCounted = false;
+    new IntersectionObserver(function(entries){
+        if(entries[0].isIntersecting && !pStatsCounted){
+            pStatsCounted = true;
+            // count up numbers
+            document.querySelectorAll('.pcount').forEach(function(el){
+                var target = parseInt(el.dataset.target);
+                if(target === 0){ el.textContent='0'; return; }
+                var n = 0;
+                var steps = 40;
+                var increment = Math.ceil(target / steps);
+                var t = setInterval(function(){
+                    n = Math.min(n + increment, target);
+                    el.textContent = n;
+                    if(n >= target) clearInterval(t);
+                }, 40);
+            });
+            // animate bars
+            setTimeout(function(){
+                document.querySelectorAll('.pstat').forEach(function(stat, i){
+                    var fill = stat.querySelector('.pstat-bar-fill');
+                    if(fill && !fill.style.width){
+                        var pcts = [60, 100, 40, 30];
+                        fill.style.width = pcts[i] + '%';
+                    }
+                });
+            }, 200);
+        }
+    }, {threshold:0.3}).observe(document.querySelector('.pstats-row'));
 
     // ── SCROLL REVEAL ──
     var ro = new IntersectionObserver(function(entries){

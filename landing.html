@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1PBRJ77DVK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-1PBRJ77DVK');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PBRJ77DVK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1PBRJ77DVK');
+    </script>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clairo — Stop Guessing. Start Knowing.</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -29,8 +27,8 @@
             width: 100%;
             z-index: 100;
             border-bottom: 1px solid #111;
-            background: rgba(8,8,8,0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(8,8,8,0.85);
+            backdrop-filter: blur(12px);
         }
         .logo { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #fff; }
         .nav-right { display: flex; align-items: center; gap: 32px; }
@@ -40,11 +38,12 @@
         .nav-btn { background: #fff; color: #080808; padding: 8px 20px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
 
         .ticker {
-            background: #0a0a0a;
+            background: rgba(10,10,10,0.7);
             border-bottom: 1px solid #111;
             padding: 10px 0;
             overflow: hidden;
-            margin-top: 65px;
+            position: relative;
+            z-index: 20;
         }
         .ticker-track { display: flex; gap: 48px; animation: ticker 25s linear infinite; white-space: nowrap; width: max-content; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -53,26 +52,61 @@
         .ticker-up { color: #00c896; }
         .ticker-down { color: #ff4d4d; }
 
+        /* ── SHADER HERO WRAPPER ── */
+        .shader-hero-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            margin-top: 65px;
+        }
+
+        #shaderCanvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            touch-action: none;
+        }
+
+        .shader-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(8,8,8,0.5) 0%,
+                rgba(8,8,8,0.3) 40%,
+                rgba(8,8,8,0.6) 80%,
+                rgba(8,8,8,1) 100%
+            );
+            z-index: 2;
+        }
+
         .hero {
-            min-height: calc(100vh - 105px);
+            position: relative;
+            z-index: 10;
             display: grid;
             grid-template-columns: 1fr 1fr;
             align-items: center;
-            padding: 60px 60px 80px;
+            padding: 80px 60px 100px;
             gap: 80px;
+            min-height: calc(100vh - 45px);
         }
         .hero-left { display: flex; flex-direction: column; justify-content: center; }
-        .hero-label { font-size: 11px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.3s; }
+        .hero-label { font-size: 11px; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.3s; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         h1 { font-size: 76px; font-weight: 900; line-height: 0.95; letter-spacing: -3px; margin-bottom: 32px; min-height: 160px; }
         h1 em { font-style: normal; color: #00c896; }
-        .hero-desc { color: #555; font-size: 15px; line-height: 1.7; margin-bottom: 40px; max-width: 380px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s; }
+        .hero-desc { color: #aaa; font-size: 15px; line-height: 1.7; margin-bottom: 40px; max-width: 380px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s; }
         .hero-cta { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.9s; }
-        .btn-primary { background: #00c896; color: #080808; padding: 14px 28px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: none; cursor: pointer; font-family: 'Inter', sans-serif; }
-        .btn-secondary { background: transparent; color: #444; padding: 14px 28px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid #1a1a1a; cursor: pointer; font-family: 'Inter', sans-serif; }
-        .hero-note { font-size: 11px; color: #333; opacity: 0; animation: fadeUp 0.8s ease forwards 1.1s; }
+        .btn-primary { background: #00c896; color: #080808; padding: 14px 28px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s; }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-secondary { background: transparent; color: #aaa; padding: 14px 28px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid #222; cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color 0.2s, color 0.2s; }
+        .btn-secondary:hover { border-color: #444; color: #fff; }
+        .hero-note { font-size: 11px; color: #444; opacity: 0; animation: fadeUp 0.8s ease forwards 1.1s; }
 
-        .dashboard-mock { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; overflow: hidden; animation: floatMock 6s ease-in-out infinite; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s, floatMock 6s ease-in-out 1.5s infinite; }
+        .dashboard-mock { background: rgba(13,13,13,0.85); backdrop-filter: blur(16px); border: 1px solid #1e1e1e; border-radius: 12px; overflow: hidden; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s, floatMock 6s ease-in-out 1.5s infinite; }
         @keyframes floatMock { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
         .mock-header { padding: 16px 20px; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; gap: 8px; }
         .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
@@ -98,11 +132,11 @@
         .stat-label { font-size: 11px; color: #333; letter-spacing: 1px; text-transform: uppercase; }
 
         .scroll-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
-.slide-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.slide-left.revealed { opacity: 1; transform: translateX(0); }
-.slide-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.slide-right.revealed { opacity: 1; transform: translateX(0); }
+        .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+        .slide-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .slide-left.revealed { opacity: 1; transform: translateX(0); }
+        .slide-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .slide-right.revealed { opacity: 1; transform: translateX(0); }
 
         .section { padding: 100px 60px; border-bottom: 1px solid #111; }
         .section-tag { font-size: 11px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 60px; }
@@ -141,588 +175,451 @@
         .success-msg { display: none; color: #00c896; font-size: 13px; margin-top: 12px; }
 
         footer { padding: 32px 60px; display: flex; justify-content: space-between; align-items: center; color: #222; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-        .hero-chart-bg {
-            position: relative;
-            background: #080808;
-            border-bottom: 1px solid #111;
-            overflow: hidden;
-        }
+
         * { cursor: none; }
         #cursor { position: fixed; width: 12px; height: 12px; background: #00c896; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); box-shadow: 0 0 8px rgba(0,200,150,0.6); transition: width 0.2s, height 0.2s; }
         #cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(0,200,150,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s, border-color 0.3s; }
         #cursor-ring.locked { width: 48px; height: 48px; border-color: rgba(0,200,150,0.8); animation: ringPulse 1s infinite; }
         #cursor.locked { width: 6px; height: 6px; background: #fff; box-shadow: 0 0 12px rgba(0,200,150,1); }
-        @keyframes ringPulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,200,150,0.3)} 50%{box-shadow:0 0 0 6px rgba(0,200,150,0)} }</style>
+        @keyframes ringPulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,200,150,0.3)} 50%{box-shadow:0 0 0 6px rgba(0,200,150,0)} }
+    </style>
 </head>
 <body>
     <div id="cursor"></div>
     <div id="cursor-ring"></div>
 
-<nav>
-    <div class="logo">Clairo</div>
-    <div class="nav-right">
-        <div class="nav-status"><span class="status-dot"></span> Collecting waitlist</div>
-        <a href="https://clairo-app.up.railway.app" class="nav-btn" target="_blank">Try Clairo →</a>
-    </div>
-</nav>
+    <nav>
+        <div class="logo">Clairo</div>
+        <div class="nav-right">
+            <div class="nav-status"><span class="status-dot"></span> Collecting waitlist</div>
+            <a href="https://clairo-app.up.railway.app" class="nav-btn" target="_blank">Try Clairo →</a>
+        </div>
+    </nav>
 
-<div class="ticker">
-    <div class="ticker-track">
-        <span class="ticker-item"><span class="ticker-symbol">AAPL</span> $270.23 <span class="ticker-up">▲ 2.59%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">TSLA</span> $388.90 <span class="ticker-down">▼ 0.78%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">NVDA</span> $198.35 <span class="ticker-up">▲ 1.20%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">META</span> $676.87 <span class="ticker-up">▲ 0.79%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">GOOGL</span> $336.02 <span class="ticker-down">▼ 0.33%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">AMZN</span> $249.00 <span class="ticker-up">▲ 1.45%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">MSFT</span> $411.22 <span class="ticker-up">▲ 2.27%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">SPY</span> $521.40 <span class="ticker-up">▲ 0.98%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">AAPL</span> $270.23 <span class="ticker-up">▲ 2.59%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">TSLA</span> $388.90 <span class="ticker-down">▼ 0.78%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">NVDA</span> $198.35 <span class="ticker-up">▲ 1.20%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">META</span> $676.87 <span class="ticker-up">▲ 0.79%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">GOOGL</span> $336.02 <span class="ticker-down">▼ 0.33%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">AMZN</span> $249.00 <span class="ticker-up">▲ 1.45%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">MSFT</span> $411.22 <span class="ticker-up">▲ 2.27%</span></span>
-        <span class="ticker-item"><span class="ticker-symbol">SPY</span> $521.40 <span class="ticker-up">▲ 0.98%</span></span>
-    </div>
-</div>
-<div class="hero-chart-bg">
-    <canvas id="bgCanvas" style="width:100%;height:260px;display:block;"></canvas>
-</div>
-<section class="hero">
-    <div class="hero-left">
-        <div class="hero-label">AI Investing · Plain English · Built for Beginners</div>
-        <h1><span id="typedText"></span><span id="typingCursor" style="color:#00c896">|</span></h1>
-        <p class="hero-desc">Clairo reads the market so you don't have to. Get a plain English summary of your stocks every morning — no jargon, no noise, just what matters.</p>
-        <div class="hero-cta">
-            <a href="https://clairo-app.up.railway.app" class="btn-primary" target="_blank">Try it free →</a>
-            <a href="#waitlist" class="btn-secondary">Join waitlist</a>
-        </div>
-        <div class="hero-note">Free during early access. No credit card required.</div>
-    </div>
-    <div class="dashboard-mock">
-        <div class="mock-header">
-            <div class="mock-dot" style="background:#ff5f57"></div>
-            <div class="mock-dot" style="background:#ffbd2e"></div>
-            <div class="mock-dot" style="background:#28c840"></div>
-            <div class="mock-title">CLAIRO</div>
-            <div class="mock-subtitle">— live market digest</div>
-        </div>
-        <div class="mock-body">
-            <div class="mock-card" id="card1">
-                <div class="mock-symbol">AAPL</div>
-                <div class="mock-price">$270.23</div>
-                <div class="mock-change-up">▲ 2.59%</div>
-                <div class="mock-summary">Apple rose today driven by strong AI product momentum. Investors remain bullish heading into earnings.</div>
-            </div>
-            <div class="mock-card" id="card2">
-                <div class="mock-symbol">TSLA</div>
-                <div class="mock-price">$388.90</div>
-                <div class="mock-change-down">▼ 0.78%</div>
-                <div class="mock-summary">Tesla slipped slightly amid broader market pressure. Monitor for delivery data next week.</div>
-            </div>
-            <div class="mock-card" id="card3">
-                <div class="mock-symbol">NVDA</div>
-                <div class="mock-price">$198.35</div>
-                <div class="mock-change-up">▲ 1.20%</div>
-                <div class="mock-summary">Nvidia gained on continued AI chip demand. Partnership news signals expanding robotics play.</div>
-            </div>
-            <div class="mock-card" id="card4">
-                <div class="mock-symbol">META</div>
-                <div class="mock-price">$676.87</div>
-                <div class="mock-change-up">▲ 0.79%</div>
-                <div class="mock-summary">Meta held steady as advertising revenue forecasts remain strong. Watch for AI updates.</div>
+    <!-- SHADER HERO: everything inside shares the WebGL background -->
+    <div class="shader-hero-wrapper">
+        <canvas id="shaderCanvas"></canvas>
+        <div class="shader-overlay"></div>
+
+        <!-- ticker floats on top of shader -->
+        <div class="ticker">
+            <div class="ticker-track">
+                <span class="ticker-item"><span class="ticker-symbol">AAPL</span> $270.23 <span class="ticker-up">▲ 2.59%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">TSLA</span> $388.90 <span class="ticker-down">▼ 0.78%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">NVDA</span> $198.35 <span class="ticker-up">▲ 1.20%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">META</span> $676.87 <span class="ticker-up">▲ 0.79%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">GOOGL</span> $336.02 <span class="ticker-down">▼ 0.33%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">AMZN</span> $249.00 <span class="ticker-up">▲ 1.45%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">MSFT</span> $411.22 <span class="ticker-up">▲ 2.27%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">SPY</span> $521.40 <span class="ticker-up">▲ 0.98%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">AAPL</span> $270.23 <span class="ticker-up">▲ 2.59%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">TSLA</span> $388.90 <span class="ticker-down">▼ 0.78%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">NVDA</span> $198.35 <span class="ticker-up">▲ 1.20%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">META</span> $676.87 <span class="ticker-up">▲ 0.79%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">GOOGL</span> $336.02 <span class="ticker-down">▼ 0.33%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">AMZN</span> $249.00 <span class="ticker-up">▲ 1.45%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">MSFT</span> $411.22 <span class="ticker-up">▲ 2.27%</span></span>
+                <span class="ticker-item"><span class="ticker-symbol">SPY</span> $521.40 <span class="ticker-up">▲ 0.98%</span></span>
             </div>
         </div>
-    </div>
-</section>
 
-<hr class="divider">
-
-<div class="stats">
-    <div class="stat scroll-reveal">
-        <div class="stat-num"><span class="count" data-target="5">0</span><em>min</em></div>
-        <div class="stat-label">Daily review time</div>
-    </div>
-    <div class="stat scroll-reveal" style="transition-delay:0.1s">
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Stocks you can track</div>
-    </div>
-    <div class="stat scroll-reveal" style="transition-delay:0.2s">
-        <div class="stat-num"><span class="count" data-target="3">0</span></div>
-        <div class="stat-label">Sentences per summary</div>
-    </div>
-    <div class="stat scroll-reveal" style="transition-delay:0.3s">
-        <div class="stat-num">$<span class="count" data-target="0">0</span></div>
-        <div class="stat-label">Cost to get started</div>
-    </div>
-</div>
-
-<section class="section">
-    <div class="section-tag scroll-reveal">How it works</div>
-    <div class="section-grid">
-        <div>
-            <div class="section-title scroll-reveal">From market chaos<br>to <em>clarity</em><br>in seconds.</div>
-            <br><br>
-            <div class="chart-container scroll-reveal">
-                <div class="chart-label"><span>AAPL — Live</span><span style="color:#00c896">▲ 2.59%</span></div>
-                <div class="chart-price">$270.23</div>
-                <div class="chart-change">▲ +$6.82 today</div>
-                <svg class="chart" viewBox="0 0 300 80" preserveAspectRatio="none">
-                    <defs>
-                        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#00c896" stop-opacity="0.15"/>
-                            <stop offset="100%" stop-color="#00c896" stop-opacity="0"/>
-                        </linearGradient>
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
-                        <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-                            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#00c896" stroke-width="0.2" opacity="0.2"/>
-                        </pattern>
-                    </defs>
-                    <rect width="1400" height="200" fill="url(#grid)"/>
-                    <path id="bgFill"...
-                            <stop offset="0%" stop-color="#00c896" stop-opacity="0.3"/>
-                            <stop offset="100%" stop-color="#00c896" stop-opacity="0"/>
-                        </linearGradient>
-                    </defs>
-                    <path id="chartFill" d="M0,60 L30,55 L60,58 L90,45 L120,40 L150,35 L180,30 L210,25 L240,20 L270,15 L300,10 L300,80 L0,80 Z" fill="url(#chartGrad)" opacity="0"/>
-                    <path id="chartLine" d="M0,60 L30,55 L60,58 L90,45 L120,40 L150,35 L180,30 L210,25 L240,20 L270,15 L300,10" fill="none" stroke="#00c896" stroke-width="2" stroke-dasharray="500" stroke-dashoffset="500"/>
-                </svg>
+        <!-- hero content -->
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-label">AI Investing · Plain English · Built for Beginners</div>
+                <h1><span id="typedText"></span><span id="typingCursor" style="color:#00c896">|</span></h1>
+                <p class="hero-desc">Clairo reads the market so you don't have to. Get a plain English summary of your stocks every morning — no jargon, no noise, just what matters.</p>
+                <div class="hero-cta">
+                    <a href="https://clairo-app.up.railway.app" class="btn-primary" target="_blank">Try it free →</a>
+                    <a href="#waitlist" class="btn-secondary">Join waitlist</a>
+                </div>
+                <div class="hero-note">Free during early access. No credit card required.</div>
             </div>
-        </div>
-        <div class="steps">
-            <div class="step scroll-reveal">
-                <div class="step-num">01</div>
-                <div class="step-content">
-                    <h3>Pick your stocks</h3>
-                    <p>Enter up to 5 stocks you want to follow. AAPL, TSLA, NVDA — whatever you care about.</p>
+            <div class="dashboard-mock">
+                <div class="mock-header">
+                    <div class="mock-dot" style="background:#ff5f57"></div>
+                    <div class="mock-dot" style="background:#ffbd2e"></div>
+                    <div class="mock-dot" style="background:#28c840"></div>
+                    <div class="mock-title">CLAIRO</div>
+                    <div class="mock-subtitle">— live market digest</div>
+                </div>
+                <div class="mock-body">
+                    <div class="mock-card" id="card1">
+                        <div class="mock-symbol">AAPL</div>
+                        <div class="mock-price">$270.23</div>
+                        <div class="mock-change-up">▲ 2.59%</div>
+                        <div class="mock-summary">Apple rose today driven by strong AI product momentum. Investors remain bullish heading into earnings.</div>
+                    </div>
+                    <div class="mock-card" id="card2">
+                        <div class="mock-symbol">TSLA</div>
+                        <div class="mock-price">$388.90</div>
+                        <div class="mock-change-down">▼ 0.78%</div>
+                        <div class="mock-summary">Tesla slipped slightly amid broader market pressure. Monitor for delivery data next week.</div>
+                    </div>
+                    <div class="mock-card" id="card3">
+                        <div class="mock-symbol">NVDA</div>
+                        <div class="mock-price">$198.35</div>
+                        <div class="mock-change-up">▲ 1.20%</div>
+                        <div class="mock-summary">Nvidia gained on continued AI chip demand. Partnership news signals expanding robotics play.</div>
+                    </div>
+                    <div class="mock-card" id="card4">
+                        <div class="mock-symbol">META</div>
+                        <div class="mock-price">$676.87</div>
+                        <div class="mock-change-up">▲ 0.79%</div>
+                        <div class="mock-summary">Meta held steady as advertising revenue forecasts remain strong. Watch for AI updates.</div>
+                    </div>
                 </div>
             </div>
-            <div class="step scroll-reveal" style="transition-delay:0.1s">
-                <div class="step-num">02</div>
-                <div class="step-content">
-                    <h3>AI reads the market</h3>
-                    <p>Clairo pulls live prices and scans the latest news headlines for each of your stocks automatically.</p>
-                </div>
-            </div>
-            <div class="step scroll-reveal" style="transition-delay:0.2s">
-                <div class="step-num">03</div>
-                <div class="step-content">
-                    <h3>You get plain English</h3>
-                    <p>3 sentences per stock. What happened, why it matters, what to watch. Nothing else.</p>
-                </div>
-            </div>
+        </section>
+    </div>
+    <!-- END SHADER HERO -->
+
+    <hr class="divider">
+
+    <div class="stats">
+        <div class="stat scroll-reveal">
+            <div class="stat-num"><span class="count" data-target="5">0</span><em>min</em></div>
+            <div class="stat-label">Daily review time</div>
+        </div>
+        <div class="stat scroll-reveal" style="transition-delay:0.1s">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">Stocks you can track</div>
+        </div>
+        <div class="stat scroll-reveal" style="transition-delay:0.2s">
+            <div class="stat-num"><span class="count" data-target="3">0</span></div>
+            <div class="stat-label">Sentences per summary</div>
+        </div>
+        <div class="stat scroll-reveal" style="transition-delay:0.3s">
+            <div class="stat-num">$<span class="count" data-target="0">0</span></div>
+            <div class="stat-label">Cost to get started</div>
         </div>
     </div>
-</section>
 
-<div class="features-grid">
-    <div class="feature scroll-reveal">
-        <div class="feature-tag">01</div>
-        <h3>Daily Briefing</h3>
-        <p>Every morning, your stocks are already summarized. No jargon, no noise — just what actually matters.</p>
-    </div>
-    <div class="feature scroll-reveal" style="transition-delay:0.1s">
-        <div class="feature-tag">02</div>
-        <h3>5 Minute Review</h3>
-        <p>Stay on top of your investments while living your life. No more hours spent reading financial reports.</p>
-    </div>
-    <div class="feature scroll-reveal" style="transition-delay:0.2s">
-        <div class="feature-tag">03</div>
-        <h3>Built for Beginners</h3>
-        <p>No finance degree needed. Clairo explains everything so you actually understand what is happening.</p>
-    </div>
-</div>
-<section class="section" style="border-bottom: 1px solid #111;">
-    <div class="section-tag scroll-reveal">What people are saying</div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 0;">
-        <div class="slide-left" style="background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"so i literally just started investing like 2 months ago and had no idea what any of it meant. searched NVDA this morning and it actually told me WHY it went up. first time i actually understood what was happening lol"</div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">J</div>
-                <div>
-                    <div style="font-size: 12px; font-weight: 600; color: #fff;">Jake R.</div>
-                    <div style="font-size: 11px; color: #333;">College student, 20</div>
+    <section class="section">
+        <div class="section-tag scroll-reveal">How it works</div>
+        <div class="section-grid">
+            <div>
+                <div class="section-title scroll-reveal">From market chaos<br>to <em>clarity</em><br>in seconds.</div>
+                <br><br>
+                <div class="chart-container scroll-reveal">
+                    <div class="chart-label"><span>AAPL — Live</span><span style="color:#00c896">▲ 2.59%</span></div>
+                    <div class="chart-price">$270.23</div>
+                    <div class="chart-change">▲ +$6.82 today</div>
+                    <svg class="chart" viewBox="0 0 300 80" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#00c896" stop-opacity="0.3"/>
+                                <stop offset="100%" stop-color="#00c896" stop-opacity="0"/>
+                            </linearGradient>
+                            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#00c896" stroke-width="0.2" opacity="0.2"/>
+                            </pattern>
+                        </defs>
+                        <rect width="300" height="80" fill="url(#grid)"/>
+                        <path id="chartFill" d="M0,60 L30,55 L60,58 L90,45 L120,40 L150,35 L180,30 L210,25 L240,20 L270,15 L300,10 L300,80 L0,80 Z" fill="url(#chartGrad)" opacity="0"/>
+                        <path id="chartLine" d="M0,60 L30,55 L60,58 L90,45 L120,40 L150,35 L180,30 L210,25 L240,20 L270,15 L300,10" fill="none" stroke="#00c896" stroke-width="2" stroke-dasharray="500" stroke-dashoffset="500"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="steps">
+                <div class="step scroll-reveal">
+                    <div class="step-num">01</div>
+                    <div class="step-content">
+                        <h3>Pick your stocks</h3>
+                        <p>Enter up to 5 stocks you want to follow. AAPL, TSLA, NVDA — whatever you care about.</p>
+                    </div>
+                </div>
+                <div class="step scroll-reveal" style="transition-delay:0.1s">
+                    <div class="step-num">02</div>
+                    <div class="step-content">
+                        <h3>AI reads the market</h3>
+                        <p>Clairo pulls live prices and scans the latest news headlines for each of your stocks automatically.</p>
+                    </div>
+                </div>
+                <div class="step scroll-reveal" style="transition-delay:0.2s">
+                    <div class="step-num">03</div>
+                    <div class="step-content">
+                        <h3>You get plain English</h3>
+                        <p>3 sentences per stock. What happened, why it matters, what to watch. Nothing else.</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="scroll-reveal" style="transition-delay: 0.1s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"been using robinhood for a year and never really knew if i should be worried or not about my stocks. clairo just tells me straight up what happened and what to look for. wish i had this when i started"</div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">M</div>
-                <div>
-                    <div style="font-size: 12px; font-weight: 600; color: #fff;">Maya T.</div>
-                    <div style="font-size: 11px; color: #333;">First-time investor, 22</div>
+    </section>
+
+    <div class="features-grid">
+        <div class="feature scroll-reveal">
+            <div class="feature-tag">01</div>
+            <h3>Daily Briefing</h3>
+            <p>Every morning, your stocks are already summarized. No jargon, no noise — just what actually matters.</p>
+        </div>
+        <div class="feature scroll-reveal" style="transition-delay:0.1s">
+            <div class="feature-tag">02</div>
+            <h3>5 Minute Review</h3>
+            <p>Stay on top of your investments while living your life. No more hours spent reading financial reports.</p>
+        </div>
+        <div class="feature scroll-reveal" style="transition-delay:0.2s">
+            <div class="feature-tag">03</div>
+            <h3>Built for Beginners</h3>
+            <p>No finance degree needed. Clairo explains everything so you actually understand what is happening.</p>
+        </div>
+    </div>
+
+    <section class="section" style="border-bottom: 1px solid #111;">
+        <div class="section-tag scroll-reveal">What people are saying</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 0;">
+            <div class="slide-left" style="background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
+                <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"so i literally just started investing like 2 months ago and had no idea what any of it meant. searched NVDA this morning and it actually told me WHY it went up. first time i actually understood what was happening lol"</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">J</div>
+                    <div>
+                        <div style="font-size: 12px; font-weight: 600; color: #fff;">Jake R.</div>
+                        <div style="font-size: 11px; color: #333;">College student, 20</div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-reveal" style="transition-delay: 0.1s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
+                <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"been using robinhood for a year and never really knew if i should be worried or not about my stocks. clairo just tells me straight up what happened and what to look for. wish i had this when i started"</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">M</div>
+                    <div>
+                        <div style="font-size: 12px; font-weight: 600; color: #fff;">Maya T.</div>
+                        <div style="font-size: 11px; color: #333;">First-time investor, 22</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-right" style="transition-delay: 0.2s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
+                <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"my finance class doesn't even explain things this clearly. typed in AAPL before school and actually knew what was going on by the time i got to first period. showing everyone this"</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">D</div>
+                    <div>
+                        <div style="font-size: 12px; font-weight: 600; color: #fff;">Devon K.</div>
+                        <div style="font-size: 11px; color: #333;">Part-time investor, 19</div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="slide-right" style="transition-delay: 0.2s; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px;">
-            <div style="font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 24px;">"my finance class doesn't even explain things this clearly. typed in AAPL before school and actually knew what was going on by the time i got to first period. showing everyone this"</div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #00c896;">D</div>
-                <div>
-                    <div style="font-size: 12px; font-weight: 600; color: #fff;">Devon K.</div>
-                    <div style="font-size: 11px; color: #333;">Part-time investor, 19</div>
-                </div>
-            </div>
+    </section>
+
+    <section class="cta-section scroll-reveal" id="waitlist">
+        <div class="cta-label">Early access</div>
+        <div style="font-size:11px;color:#444;margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:1px;text-transform:uppercase;">
+            <span style="width:6px;height:6px;background:#00c896;border-radius:50%;display:inline-block;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(0,200,150,0.6)"></span>Early access open now
         </div>
-    </div>
-</section>
-<section class="cta-section scroll-reveal" id="waitlist">
-    <div class="cta-label">Early access</div>
-    <div style="font-size:11px;color:#444;margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:1px;text-transform:uppercase;"><span style="width:6px;height:6px;background:#00c896;border-radius:50%;display:inline-block;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(0,200,150,0.6)"></span>Early access open now</div>
-    <div class="cta-title">Start knowing<br>your <em>market.</em></div>
-    <div class="email-form">
-        <input type="email" placeholder="your@email.com" id="emailInput" />
-        <button class="btn-primary" onclick="joinWaitlist()">Join →</button>
-    </div>
-    <div class="form-note">No card required. Free during early access.</div>
-    <div class="success-msg" id="successMsg">You are on the waitlist. We will be in touch.</div>
-</section>
+        <div class="cta-title">Start knowing<br>your <em>market.</em></div>
+        <div class="email-form">
+            <input type="email" placeholder="your@email.com" id="emailInput" />
+            <button class="btn-primary" onclick="joinWaitlist()">Join →</button>
+        </div>
+        <div class="form-note">No card required. Free during early access.</div>
+        <div class="success-msg" id="successMsg">You are on the waitlist. We will be in touch.</div>
+    </section>
 
-<footer>
-    <div>Clairo</div>
-    <div>© 2026 — Not financial advice</div>
-</footer>
+    <footer>
+        <div>Clairo</div>
+        <div>© 2026 — Not financial advice</div>
+    </footer>
 
-<script>
-    // Typing animation
+    <script>
+    // ── WebGL SHADER BACKGROUND (Clairo green palette) ──
+    (function() {
+        var canvas = document.getElementById('shaderCanvas');
+        var gl = canvas.getContext('webgl2');
+        if (!gl) return;
+
+        var vertSrc = '#version 300 es\nprecision highp float;\nin vec4 position;\nvoid main(){gl_Position=position;}';
+
+        var fragSrc = `#version 300 es
+precision highp float;
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+#define FC gl_FragCoord.xy
+#define T time
+#define R resolution
+#define MN min(R.x,R.y)
+
+float rnd(vec2 p){
+  p=fract(p*vec2(12.9898,78.233));
+  p+=dot(p,p+34.56);
+  return fract(p.x*p.y);
+}
+float noise(in vec2 p){
+  vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);
+  float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.);
+  return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);
+}
+float fbm(vec2 p){
+  float t=.0,a=1.;mat2 m=mat2(1.,-.5,.2,1.2);
+  for(int i=0;i<5;i++){t+=a*noise(p);p*=2.*m;a*=.5;}
+  return t;
+}
+float clouds(vec2 p){
+  float d=1.,t=.0;
+  for(float i=.0;i<3.;i++){
+    float a=d*fbm(i*10.+p.x*.2+.2*(1.+i)*p.y+d+i*i+p);
+    t=mix(t,d,a);d=a;p*=2./(i+1.);
+  }
+  return t;
+}
+void main(void){
+  vec2 uv=(FC-.5*R)/MN,st=uv*vec2(2,1);
+  vec3 col=vec3(0);
+  float bg=clouds(vec2(st.x+T*.5,-st.y));
+  uv*=1.-.3*(sin(T*.2)*.5+.5);
+  for(float i=1.;i<12.;i++){
+    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);
+    vec2 p=uv;
+    float d=length(p);
+    // Clairo green palette: #00c896 = rgb(0, 0.784, 0.588)
+    vec3 g=vec3(
+      0.0,
+      0.784*abs(sin(i*0.5+T*0.08)),
+      0.588*abs(cos(i*0.4+T*0.06))
+    );
+    col+=.00125/d*(g+0.1);
+    float b=noise(i+p+bg*1.731);
+    col+=.002*b/length(max(p,vec2(b*p.x*.02,p.y)));
+    col=mix(col,vec3(0.0,bg*0.10,bg*0.07),d);
+  }
+  col*=0.5;
+  O=vec4(col,1);
+}`;
+
+        function makeShader(type, src) {
+            var s = gl.createShader(type);
+            gl.shaderSource(s, src);
+            gl.compileShader(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+                console.warn('Shader error', gl.getShaderInfoLog(s));
+                return null;
+            }
+            return s;
+        }
+
+        var vs = makeShader(gl.VERTEX_SHADER, vertSrc);
+        var fs = makeShader(gl.FRAGMENT_SHADER, fragSrc);
+        if (!vs || !fs) return;
+
+        var prog = gl.createProgram();
+        gl.attachShader(prog, vs); gl.attachShader(prog, fs);
+        gl.linkProgram(prog);
+        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.warn('Link error'); return; }
+
+        var buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,-1,-1,1,1,1,-1]), gl.STATIC_DRAW);
+        var pos = gl.getAttribLocation(prog, 'position');
+        gl.enableVertexAttribArray(pos);
+        gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
+        var uRes  = gl.getUniformLocation(prog, 'resolution');
+        var uTime = gl.getUniformLocation(prog, 'time');
+
+        function resize() {
+            var dpr = Math.max(1, window.devicePixelRatio * 0.65);
+            canvas.width  = window.innerWidth * dpr;
+            canvas.height = canvas.parentElement.offsetHeight * dpr;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function loop(now) {
+            gl.useProgram(prog);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.uniform2f(uRes, canvas.width, canvas.height);
+            gl.uniform1f(uTime, now * 0.001);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+    })();
+
+    // ── TYPING ANIMATION ──
     var lines = ["Stop guessing.", "Start knowing."];
-    var lineIndex = 0;
-    var charIndex = 0;
+    var lineIndex = 0, charIndex = 0;
     var typedEl = document.getElementById('typedText');
     var cursorEl = document.getElementById('typingCursor');
-
     function type() {
         if (lineIndex < lines.length) {
-            var currentLine = lines[lineIndex];
-            if (charIndex <= currentLine.length) {
-                if (lineIndex === 0) {
-                    typedEl.innerHTML = currentLine.substring(0, charIndex) + '<br>';
-                } else {
-                    typedEl.innerHTML = lines[0] + '<br><em>' + currentLine.substring(0, charIndex) + '</em>';
-                }
+            var cur = lines[lineIndex];
+            if (charIndex <= cur.length) {
+                typedEl.innerHTML = lineIndex === 0
+                    ? cur.substring(0, charIndex) + '<br>'
+                    : lines[0] + '<br><em>' + cur.substring(0, charIndex) + '</em>';
                 charIndex++;
                 setTimeout(type, lineIndex === 0 ? 80 : 100);
             } else {
-                lineIndex++;
-                charIndex = 0;
+                lineIndex++; charIndex = 0;
                 if (lineIndex < lines.length) setTimeout(type, 300);
-                else {
-                    setTimeout(function() { cursorEl.style.display = 'none'; }, 1500);
-                }
+                else setTimeout(function(){ cursorEl.style.display='none'; }, 1500);
             }
         }
     }
     setTimeout(type, 600);
+    setInterval(function(){ cursorEl.style.opacity = cursorEl.style.opacity === '0' ? '1' : '0'; }, 500);
 
-    // Cursor blink
-    setInterval(function() {
-        cursorEl.style.opacity = cursorEl.style.opacity === '0' ? '1' : '0';
-    }, 500);
+    // ── MOCK CARDS ──
+    setTimeout(function(){ document.getElementById('card1').classList.add('visible'); }, 1000);
+    setTimeout(function(){ document.getElementById('card2').classList.add('visible'); }, 1300);
+    setTimeout(function(){ document.getElementById('card3').classList.add('visible'); }, 1600);
+    setTimeout(function(){ document.getElementById('card4').classList.add('visible'); }, 1900);
 
-    // Card fade in
-    setTimeout(function() { document.getElementById('card1').classList.add('visible'); }, 1000);
-    setTimeout(function() { document.getElementById('card2').classList.add('visible'); }, 1300);
-    setTimeout(function() { document.getElementById('card3').classList.add('visible'); }, 1600);
-    setTimeout(function() { document.getElementById('card4').classList.add('visible'); }, 1900);
-
-    // Scroll reveal
-    var revealObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-            }
-        });
+    // ── SCROLL REVEAL ──
+    var ro = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('revealed'); });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.scroll-reveal, .slide-left, .slide-right').forEach(function(el) {
-    revealObserver.observe(el);
-});
+    document.querySelectorAll('.scroll-reveal,.slide-left,.slide-right').forEach(function(el){ ro.observe(el); });
 
-    // Count up
+    // ── COUNT UP ──
     var counted = false;
-    var statsObserver = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !counted) {
+    new IntersectionObserver(function(entries){
+        if(entries[0].isIntersecting && !counted){
             counted = true;
-            document.querySelectorAll('.count').forEach(function(el) {
+            document.querySelectorAll('.count').forEach(function(el){
                 var target = parseInt(el.dataset.target);
-                if (target === 0) { el.textContent = '0'; return; }
-                var start = 0;
-                var timer = setInterval(function() {
-                    start++;
-                    el.textContent = start;
-                    if (start >= target) clearInterval(timer);
-                }, 200);
+                if(target === 0){ el.textContent='0'; return; }
+                var n = 0;
+                var t = setInterval(function(){ n++; el.textContent=n; if(n>=target) clearInterval(t); }, 200);
             });
         }
-    });
-    statsObserver.observe(document.querySelector('.stats'));
+    }).observe(document.querySelector('.stats'));
 
-    // Animated chart line
-    var chartObserver = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting) {
-            var line = document.getElementById('chartLine');
-            var fill = document.getElementById('chartFill');
-            fill.style.opacity = '1';
-            fill.style.transition = 'opacity 1s ease';
-            var progress = 500;
-            var timer = setInterval(function() {
-                progress -= 8;
-                line.style.strokeDashoffset = progress;
-                if (progress <= 0) clearInterval(timer);
+    // ── CHART LINE ANIMATION ──
+    new IntersectionObserver(function(entries){
+        if(entries[0].isIntersecting){
+            document.getElementById('chartFill').style.cssText += 'opacity:1;transition:opacity 1s ease;';
+            var p = 500;
+            var t = setInterval(function(){
+                p -= 8;
+                document.getElementById('chartLine').style.strokeDashoffset = p;
+                if(p<=0) clearInterval(t);
             }, 16);
-            chartObserver.disconnect();
         }
-    }, { threshold: 0.3 });
-    chartObserver.observe(document.querySelector('.chart-container'));
+    }, {threshold:0.3}).observe(document.querySelector('.chart-container'));
 
-    // Live number fluctuation
-    var prices = { AAPL: 270.23, TSLA: 388.90, NVDA: 198.35, META: 676.87, GOOGL: 336.02, AMZN: 249.00, MSFT: 411.22, SPY: 521.40 };
-    var tickerSymbols = document.querySelectorAll('.ticker-item');
-    setInterval(function() {
-        tickerSymbols.forEach(function(item) {
-            var sym = item.querySelector('.ticker-symbol').textContent;
-            if (prices[sym]) {
-                var change = (Math.random() - 0.5) * 0.2;
-                prices[sym] = Math.max(1, prices[sym] + change);
-                var pct = item.querySelector('.ticker-up, .ticker-down');
-                if (pct) {
-                    var currentPct = parseFloat(pct.textContent.replace(/[▲▼%]/g, ''));
-                    var newPct = Math.max(0.01, currentPct + (Math.random() - 0.5) * 0.05);
-                    pct.textContent = (pct.classList.contains('ticker-up') ? '▲ ' : '▼ ') + newPct.toFixed(2) + '%';
-                }
+    // ── TICKER FLUCTUATION ──
+    setInterval(function(){
+        document.querySelectorAll('.ticker-item').forEach(function(item){
+            var pct = item.querySelector('.ticker-up,.ticker-down');
+            if(pct){
+                var v = Math.max(0.01, parseFloat(pct.textContent.replace(/[▲▼%\s]/g,'')) + (Math.random()-0.5)*0.05);
+                pct.textContent = (pct.classList.contains('ticker-up') ? '▲ ' : '▼ ') + v.toFixed(2) + '%';
             }
         });
     }, 2000);
-// Background chart animation
-// Multi-line terminal chart
-var canvas = document.getElementById('bgCanvas');
-var ctx = canvas.getContext('2d');
 
-function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=260;}
-resizeCanvas();
-window.addEventListener('resize',resizeCanvas);
-
-var spacing=6;
-var scrollX=0;
-var historyLen=Math.ceil(window.innerWidth/spacing)+40;
-
-var series=[
-{name:'SPY',color:'#00c896',shadowColor:'rgba(0,200,150,0.6)',baseY:120,trend:-0.10,volatility:18,pts:[],pct:'+0.98%'},
-    {name:'QQQ',color:'#00e5ff',shadowColor:'rgba(0,229,255,0.4)',baseY:155,trend:-0.15,volatility:24,pts:[],pct:'+1.24%'},
-    {name:'DIA',color:'rgba(255,255,255,0.35)',shadowColor:'rgba(255,255,255,0.2)',baseY:138,trend:-0.05,volatility:10,pts:[],pct:'-0.12%'}
-];
-
-// Initialize points
-series.forEach(function(s){
-    var y=s.baseY+60;
-    for(var i=0;i<historyLen;i++){
-        var trend=(i/historyLen)*s.trend*200;
-        var noise=(Math.random()-0.4)*s.volatility;
-        y=Math.max(20,Math.min(195,y+noise+trend/historyLen));
-        s.pts.push(y);
-    }
-});
-
-function addPoints(){
-    series.forEach(function(s){
-        var last=s.pts[s.pts.length-1];
-        var noise=(Math.random()-0.42)*s.volatility;
-        var newY=Math.max(20,Math.min(195,last+noise));
-        s.pts.push(newY);
-        if(s.pts.length>historyLen+20)s.pts.shift();
-    });
-}
-
-function drawChart(){
-    var w=canvas.width,h=canvas.height;
-    ctx.clearRect(0,0,w,h);
-
-    // Background grid
-    ctx.strokeStyle='rgba(0,200,150,0.04)';ctx.lineWidth=0.5;
-    for(var x=0;x<w;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h-20);ctx.stroke();}
-    for(var y=0;y<h-20;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
-
-    // Horizontal price levels
-    var levels=[25,65,105,145,185];
-    levels.forEach(function(ly){
-        ctx.strokeStyle='rgba(0,200,150,0.06)';ctx.lineWidth=0.5;
-        ctx.setLineDash([4,8]);
-        ctx.beginPath();ctx.moveTo(0,ly);ctx.lineTo(w-80,ly);ctx.stroke();
-        ctx.setLineDash([]);
-    });
-
-    // Scroll
-    scrollX+=0.4;
-    if(scrollX>=spacing){scrollX-=spacing;addPoints();}
-
-    var numVisible=Math.ceil(w/spacing)+2;
-
-    // Draw each series
-    series.forEach(function(s,si){
-        var visiblePts=s.pts.slice(-numVisible);
-        var pathX=[],pathY=[];
-        for(var i=0;i<visiblePts.length;i++){
-            pathX.push(i*spacing-scrollX);
-            pathY.push(visiblePts[i]);
-        }
-
-        // Fill only for SPY
-        if(si===0){
-            ctx.beginPath();
-            ctx.moveTo(pathX[0],pathY[0]);
-            for(var i=1;i<pathX.length;i++)ctx.lineTo(pathX[i],pathY[i]);
-            ctx.lineTo(pathX[pathX.length-1],h-20);
-            ctx.lineTo(pathX[0],h-20);
-            ctx.closePath();
-            var grad=ctx.createLinearGradient(0,0,0,h);
-            grad.addColorStop(0,'rgba(0,200,150,0.12)');
-            grad.addColorStop(1,'rgba(0,200,150,0)');
-            ctx.fillStyle=grad;ctx.fill();
-        }
-
-        // Line
-        ctx.beginPath();
-        ctx.moveTo(pathX[0],pathY[0]);
-        for(var i=1;i<pathX.length;i++)ctx.lineTo(pathX[i],pathY[i]);
-        ctx.strokeStyle=s.color;
-        ctx.lineWidth=si===0?2:1.5;
-        ctx.shadowBlur=si===0?8:4;
-        ctx.shadowColor=s.shadowColor;
-        ctx.stroke();ctx.shadowBlur=0;
-
-        // End dot
-        var ex=pathX[pathX.length-1];
-        var ey=pathY[pathY.length-1];
-        ctx.beginPath();ctx.arc(ex,ey,3,0,Math.PI*2);
-        ctx.fillStyle=s.color;
-        ctx.shadowBlur=12;ctx.shadowColor=s.shadowColor;
-        ctx.fill();ctx.shadowBlur=0;
-    });
-
-    // Right side labels
-    series.forEach(function(s,si){
-        var visiblePts=s.pts.slice(-numVisible);
-        var ey=visiblePts[visiblePts.length-1];
-        var lx=w-72;
-        // Label bg
-        ctx.fillStyle='rgba(8,8,8,0.8)';
-        ctx.fillRect(lx-2,ey-9,68,16);
-        ctx.font='bold 10px Inter,sans-serif';
-        ctx.fillStyle=s.color;
-        ctx.fillText(s.name+' '+s.pct,lx,ey+3);
-    });
-
-    // Volume bars
-    var volPts=series[0].pts.slice(-numVisible);
-    for(var i=0;i<volPts.length;i+=3){
-        var bx=i*spacing-scrollX;
-        if(bx<0||bx>w)continue;
-        var bh=4+Math.random()*14;
-        ctx.fillStyle='rgba(0,200,150,0.07)';
-        ctx.fillRect(bx-4,h-20-bh,8,bh);
-    }
-
-    // Baseline
-    ctx.beginPath();ctx.moveTo(0,h-20);ctx.lineTo(w,h-20);
-    ctx.strokeStyle='rgba(0,200,150,0.2)';ctx.lineWidth=1;ctx.stroke();
-
-    // Time labels
-    // Crosshair — all 3 series
-    if(mouseX>0&&mouseX<w-80&&mouseY>0&&mouseY<h-20){
-        var visLen=Math.ceil(w/spacing)+2;
-        var nearestIdx=Math.round((mouseX+scrollX)/spacing);
-
-        // Vertical line
-        ctx.beginPath();ctx.moveTo(mouseX,0);ctx.lineTo(mouseX,h-20);
-        ctx.strokeStyle='rgba(0,200,150,0.25)';ctx.lineWidth=1;
-        ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
-
-        // Dots and horizontal lines for each series
-        var tooltipLines=[];
-        series.forEach(function(s,si){
-            var vis=s.pts.slice(-visLen);
-            var idx=Math.max(0,Math.min(nearestIdx,vis.length-1));
-            var snapX=idx*spacing-scrollX;
-            var snapY=vis[idx];
-
-            // Horizontal dashed line
-            ctx.beginPath();ctx.moveTo(0,snapY);ctx.lineTo(w-80,snapY);
-            ctx.strokeStyle=s.color.replace(')',',0.15)').replace('rgba','rgba').replace('rgb','rgba');
-            ctx.strokeStyle='rgba(0,200,150,0.1)';
-            ctx.lineWidth=0.5;
-            ctx.setLineDash([2,6]);ctx.stroke();ctx.setLineDash([]);
-
-            // Snap dot
-            ctx.beginPath();ctx.arc(snapX,snapY,4,0,Math.PI*2);
-            ctx.fillStyle=s.color;
-            ctx.shadowBlur=12;ctx.shadowColor=s.color;
-            ctx.fill();ctx.shadowBlur=0;
-            ctx.beginPath();ctx.arc(snapX,snapY,8,0,Math.PI*2);
-            ctx.strokeStyle=s.color;ctx.lineWidth=1;ctx.globalAlpha=0.3;ctx.stroke();ctx.globalAlpha=1;
-
-            var price=(270+(si*15)+(190-snapY)*0.8).toFixed(2);
-            tooltipLines.push({name:s.name,price:'$'+price,color:s.color});
-        });
-
-        // Tooltip box — all 3
-        var tooltipW=110,tooltipH=14+tooltipLines.length*18;
-        var tx=mouseX+12;
-        var ty=mouseY-tooltipH/2;
-        if(tx+tooltipW>w-80)tx=mouseX-tooltipW-12;
-        if(ty<0)ty=4;
-        if(ty+tooltipH>h-20)ty=h-20-tooltipH;
-
-        ctx.fillStyle='rgba(8,8,8,0.92)';
-        ctx.strokeStyle='rgba(0,200,150,0.4)';
-        ctx.lineWidth=1;
-        ctx.beginPath();ctx.rect(tx,ty,tooltipW,tooltipH);
-        ctx.fill();ctx.stroke();
-
-        tooltipLines.forEach(function(t,i){
-            ctx.font='bold 10px Inter,sans-serif';
-            ctx.fillStyle=t.color;
-            ctx.fillText(t.name,tx+8,ty+16+i*18);
-            ctx.font='10px Inter,sans-serif';
-            ctx.fillStyle='#fff';
-            ctx.fillText(t.price,tx+40,ty+16+i*18);
-        });
-    }
-
-    // Top left legend
-    series.forEach(function(s,i){
-        ctx.beginPath();ctx.arc(16,16+i*18,4,0,Math.PI*2);
-        ctx.fillStyle=s.color;ctx.shadowBlur=6;ctx.shadowColor=s.color;
-        ctx.fill();ctx.shadowBlur=0;
-        ctx.font='bold 9px Inter,sans-serif';
-        ctx.fillStyle=s.color;
-        ctx.fillText(s.name+' '+s.pct,26,20+i*18);
-    });
-
-    requestAnimationFrame(drawChart);
-}
-
-var mouseX=-1,mouseY=-1;
-canvas.addEventListener('mousemove',function(e){
-    var rect=canvas.getBoundingClientRect();
-    mouseX=e.clientX-rect.left;
-    mouseY=e.clientY-rect.top;
-});
-canvas.addEventListener('mouseleave',function(){mouseX=-1;mouseY=-1;});
-drawChart();
-    // Waitlist
+    // ── WAITLIST ──
     async function joinWaitlist() {
         var email = document.getElementById('emailInput').value;
-        if (email && email.indexOf('@') > -1) {
-            var response = await fetch('https://formspree.io/f/xyklevqo', {
+        if (email && email.includes('@')) {
+            var r = await fetch('https://formspree.io/f/xyklevqo', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email })
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({email})
             });
-            if (response.ok) {
+            if (r.ok) {
                 document.getElementById('successMsg').style.display = 'block';
                 document.getElementById('emailInput').value = '';
             }
@@ -730,17 +627,16 @@ drawChart();
             alert('Please enter a valid email.');
         }
     }
-    var cur=document.getElementById('cursor');
-var ring=document.getElementById('cursor-ring');
-var mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',function(e){ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); }
-animRing();
-var lockEls='.btn-primary,.btn-secondary,.nav-btn,.empty-tag,.feature,.stat,.slide-left,.scroll-reveal,.slide-right';
-document.addEventListener('mouseover',function(e){ if(e.target.closest(lockEls)){ cur.classList.add('locked'); ring.classList.add('locked'); } });
-document.addEventListener('mouseout',function(e){ if(e.target.closest(lockEls)){ cur.classList.remove('locked'); ring.classList.remove('locked'); } });
 
-</script>
-
+    // ── CUSTOM CURSOR ──
+    var cur = document.getElementById('cursor');
+    var ring = document.getElementById('cursor-ring');
+    var mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+    (function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
+    var lockSel = '.btn-primary,.btn-secondary,.nav-btn,.feature,.stat,.slide-left,.scroll-reveal,.slide-right';
+    document.addEventListener('mouseover', function(e){ if(e.target.closest(lockSel)){ cur.classList.add('locked'); ring.classList.add('locked'); } });
+    document.addEventListener('mouseout',  function(e){ if(e.target.closest(lockSel)){ cur.classList.remove('locked'); ring.classList.remove('locked'); } });
+    </script>
 </body>
 </html>

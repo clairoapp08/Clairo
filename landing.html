@@ -268,6 +268,135 @@
             box-shadow: 0 0 6px rgba(0,200,150,0.4);
         }
 
+        /* ── HOW IT WORKS TIMELINE ── */
+        .hiw-section {
+            padding: 100px 60px;
+            border-bottom: 1px solid #111;
+        }
+        .hiw-header {
+            max-width: 560px;
+            margin-bottom: 72px;
+        }
+        .hiw-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .hiw-title em { font-style: normal; color: #00c896; }
+        .hiw-sub { font-size: 14px; color: #444; }
+        .hiw-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+        }
+        .hiw-step { display: flex; flex-direction: column; }
+        .hiw-step-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .hiw-num-wrap {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+        }
+        .hiw-num-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(0,200,150,0.3);
+            background: rgba(0,200,150,0.05);
+            animation: ringPulse 3s infinite;
+        }
+        .hiw-num {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #00c896;
+            letter-spacing: 1px;
+        }
+        .hiw-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(0,200,150,0.3), rgba(0,200,150,0.05));
+            margin-left: 16px;
+        }
+        .hiw-card {
+            position: relative;
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 32px 28px;
+            margin-right: 20px;
+            overflow: hidden;
+            flex: 1;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .hiw-card:hover {
+            border-color: rgba(0,200,150,0.2);
+            transform: translateY(-4px);
+        }
+        .hiw-card-last { margin-right: 0; }
+        .hiw-card-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 0% 0%, rgba(0,200,150,0.06) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+        .hiw-card:hover .hiw-card-glow { opacity: 1; }
+        .hiw-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .hiw-icon svg { width: 18px; height: 18px; }
+        .hiw-icon-green { color: #00c896; border-color: rgba(0,200,150,0.2); background: rgba(0,200,150,0.05); }
+        .hiw-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+            margin-bottom: 10px;
+        }
+        .hiw-card-desc {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        .hiw-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .hiw-tag {
+            font-size: 10px;
+            color: #444;
+            padding: 4px 10px;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            background: #111;
+            letter-spacing: 0.3px;
+        }
+        .hiw-tag-green {
+            color: #00c896;
+            border-color: rgba(0,200,150,0.2);
+            background: rgba(0,200,150,0.05);
+        }
+
         /* ── PREMIUM WAITLIST CTA ── */
         .wl-section {
             position: relative;
@@ -853,52 +982,83 @@
         </div>
     </div>
 
-    <section class="section">
-        <div class="section-tag scroll-reveal">How it works</div>
-        <div class="section-grid">
-            <div>
-                <div class="section-title scroll-reveal">From market chaos<br>to <em>clarity</em><br>in seconds.</div>
-                <br><br>
-                <div class="chart-container scroll-reveal">
-                    <div class="chart-label"><span>AAPL — Live</span><span style="color:#00c896">▲ 2.59%</span></div>
-                    <div class="chart-price">$270.23</div>
-                    <div class="chart-change">▲ +$6.82 today</div>
-                    <svg class="chart" viewBox="0 0 300 80" preserveAspectRatio="none">
-                        <defs>
-                            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#00c896" stop-opacity="0.3"/>
-                                <stop offset="100%" stop-color="#00c896" stop-opacity="0"/>
-                            </linearGradient>
-                            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-                                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#00c896" stroke-width="0.2" opacity="0.2"/>
-                            </pattern>
-                        </defs>
-                        <rect width="300" height="80" fill="url(#grid)"/>
-                        <path id="chartFill" d="M0,60 L30,55 L60,58 L90,45 L120,40 L150,35 L180,30 L210,25 L240,20 L270,15 L300,10 L300,80 L0,80 Z" fill="url(#chartGrad)" opacity="0"/>
-                        <path id="chartLine" d="M0,60 L30,55 L60,58 L90,45 L120,40 L150,35 L180,30 L210,25 L240,20 L270,15 L300,10" fill="none" stroke="#00c896" stroke-width="2" stroke-dasharray="500" stroke-dashoffset="500"/>
-                    </svg>
+    <!-- HOW IT WORKS — PREMIUM TIMELINE -->
+    <section class="hiw-section">
+        <div class="hiw-header">
+            <div class="section-tag scroll-reveal">How it works</div>
+            <div class="hiw-title scroll-reveal">From market chaos<br>to <em>clarity</em> in seconds.</div>
+            <p class="hiw-sub scroll-reveal">Three steps. No learning curve. No jargon.</p>
+        </div>
+
+        <div class="hiw-grid">
+            <!-- Step 1 -->
+            <div class="hiw-step scroll-reveal">
+                <div class="hiw-step-top">
+                    <div class="hiw-num-wrap">
+                        <div class="hiw-num-ring"></div>
+                        <div class="hiw-num">01</div>
+                    </div>
+                    <div class="hiw-line"></div>
+                </div>
+                <div class="hiw-card">
+                    <div class="hiw-card-glow"></div>
+                    <div class="hiw-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    </div>
+                    <h3 class="hiw-card-title">Pick your stocks</h3>
+                    <p class="hiw-card-desc">Enter up to 5 stocks you want to follow. AAPL, TSLA, NVDA — whatever you care about. Clairo saves them automatically.</p>
+                    <div class="hiw-tags">
+                        <span class="hiw-tag">AAPL</span>
+                        <span class="hiw-tag">TSLA</span>
+                        <span class="hiw-tag">NVDA</span>
+                        <span class="hiw-tag">+ more</span>
+                    </div>
                 </div>
             </div>
-            <div class="steps">
-                <div class="step scroll-reveal">
-                    <div class="step-num">01</div>
-                    <div class="step-content">
-                        <h3>Pick your stocks</h3>
-                        <p>Enter up to 5 stocks you want to follow. AAPL, TSLA, NVDA — whatever you care about.</p>
+
+            <!-- Step 2 -->
+            <div class="hiw-step scroll-reveal" style="transition-delay:0.15s">
+                <div class="hiw-step-top">
+                    <div class="hiw-num-wrap">
+                        <div class="hiw-num-ring"></div>
+                        <div class="hiw-num">02</div>
+                    </div>
+                    <div class="hiw-line"></div>
+                </div>
+                <div class="hiw-card">
+                    <div class="hiw-card-glow"></div>
+                    <div class="hiw-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3 class="hiw-card-title">AI reads the market</h3>
+                    <p class="hiw-card-desc">Clairo pulls live prices and scans real news headlines for each of your stocks. No manual research needed — it happens automatically.</p>
+                    <div class="hiw-tags">
+                        <span class="hiw-tag">Live prices</span>
+                        <span class="hiw-tag">News scan</span>
+                        <span class="hiw-tag">Auto</span>
                     </div>
                 </div>
-                <div class="step scroll-reveal" style="transition-delay:0.1s">
-                    <div class="step-num">02</div>
-                    <div class="step-content">
-                        <h3>AI reads the market</h3>
-                        <p>Clairo pulls live prices and scans the latest news headlines for each of your stocks automatically.</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="hiw-step scroll-reveal" style="transition-delay:0.3s">
+                <div class="hiw-step-top">
+                    <div class="hiw-num-wrap hiw-num-wrap-last">
+                        <div class="hiw-num-ring"></div>
+                        <div class="hiw-num">03</div>
                     </div>
                 </div>
-                <div class="step scroll-reveal" style="transition-delay:0.2s">
-                    <div class="step-num">03</div>
-                    <div class="step-content">
-                        <h3>You get plain English</h3>
-                        <p>3 sentences per stock. What happened, why it matters, what to watch. Nothing else.</p>
+                <div class="hiw-card hiw-card-last">
+                    <div class="hiw-card-glow"></div>
+                    <div class="hiw-icon hiw-icon-green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+                    </div>
+                    <h3 class="hiw-card-title">You get plain English</h3>
+                    <p class="hiw-card-desc">3 sentences per stock. What happened, why it matters, what to watch. No jargon, no noise — just what you actually need to know.</p>
+                    <div class="hiw-tags">
+                        <span class="hiw-tag hiw-tag-green">What happened</span>
+                        <span class="hiw-tag hiw-tag-green">Why it moved</span>
+                        <span class="hiw-tag hiw-tag-green">Watch for</span>
                     </div>
                 </div>
             </div>

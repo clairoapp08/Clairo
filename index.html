@@ -268,6 +268,164 @@
             box-shadow: 0 0 6px rgba(0,200,150,0.4);
         }
 
+        /* ── PREMIUM WAITLIST CTA ── */
+        .wl-section {
+            position: relative;
+            padding: 120px 60px;
+            border-bottom: 1px solid #111;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+        .wl-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .wl-blob-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(0,200,150,0.08) 0%, transparent 70%);
+            top: -100px; left: -100px;
+        }
+        .wl-blob-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(0,200,150,0.06) 0%, transparent 70%);
+            bottom: -80px; right: -80px;
+        }
+        .wl-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 640px;
+            width: 100%;
+            text-align: center;
+        }
+        .wl-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #555;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+        .wl-dot {
+            width: 6px; height: 6px;
+            background: #00c896;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 6px rgba(0,200,150,0.6);
+        }
+        .wl-title {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 0.95;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .wl-title em { font-style: normal; color: #00c896; }
+        .wl-sub {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 48px;
+        }
+        /* glass card */
+        .wl-card {
+            position: relative;
+            background: rgba(13,13,13,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 36px;
+            overflow: hidden;
+        }
+        .wl-card-glow {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at top left, rgba(0,200,150,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse at bottom right, rgba(0,200,150,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .wl-card-inner { position: relative; z-index: 2; }
+        /* avatar stack */
+        .wl-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .wl-avatars { display: flex; }
+        .wl-av {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: 2px solid #0d0d0d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            margin-left: -8px;
+        }
+        .wl-avatars .wl-av:first-child { margin-left: 0; }
+        .wl-proof { font-size: 12px; color: #555; }
+        /* pill input */
+        .wl-pill-wrap { margin-bottom: 16px; }
+        .wl-pill {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-radius: 100px;
+            padding: 6px 6px 6px 16px;
+            transition: border-color 0.3s;
+        }
+        .wl-pill:focus-within { border-color: rgba(0,200,150,0.4); box-shadow: 0 0 0 3px rgba(0,200,150,0.06); }
+        .wl-mail-icon {
+            width: 16px; height: 16px;
+            color: #444;
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+        .wl-pill-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+        .wl-pill-input::placeholder { color: #333; }
+        .wl-pill-btn {
+            background: #00c896;
+            color: #080808;
+            border: none;
+            border-radius: 100px;
+            padding: 12px 24px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: none;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s, transform 0.2s;
+            white-space: nowrap;
+        }
+        .wl-pill-btn:hover { opacity: 0.85; transform: scale(0.98); }
+        .wl-note { font-size: 11px; color: #333; }
+        .wl-success {
+            display: none;
+            color: #00c896;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
         /* ── SCROLLING TESTIMONIALS ── */
         @keyframes scrollUp {
             0%   { transform: translateY(0); }
@@ -851,18 +1009,54 @@
         </div>
     </section>
 
-    <section class="cta-section scroll-reveal" id="waitlist">
-        <div class="cta-label">Early access</div>
-        <div style="font-size:11px;color:#444;margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:1px;text-transform:uppercase;">
-            <span style="width:6px;height:6px;background:#00c896;border-radius:50%;display:inline-block;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(0,200,150,0.6)"></span>Early access open now
+    <!-- PREMIUM WAITLIST CTA -->
+    <section class="wl-section" id="waitlist">
+        <!-- background glow blobs -->
+        <div class="wl-blob wl-blob-1"></div>
+        <div class="wl-blob wl-blob-2"></div>
+
+        <div class="wl-inner scroll-reveal">
+            <!-- label -->
+            <div class="wl-label">
+                <span class="wl-dot"></span>
+                Early access open now
+            </div>
+
+            <!-- headline -->
+            <h2 class="wl-title">Start knowing<br>your <em>market.</em></h2>
+            <p class="wl-sub">Join thousands of beginners who actually understand their stocks now.</p>
+
+            <!-- glass card -->
+            <div class="wl-card">
+                <div class="wl-card-glow"></div>
+                <div class="wl-card-inner">
+                    <!-- avatar stack + social proof -->
+                    <div class="wl-social">
+                        <div class="wl-avatars">
+                            <div class="wl-av" style="background:linear-gradient(135deg,#00c896,#00a070)">J</div>
+                            <div class="wl-av" style="background:linear-gradient(135deg,#0099ff,#0066cc)">M</div>
+                            <div class="wl-av" style="background:linear-gradient(135deg,#aa44ff,#7722cc)">A</div>
+                            <div class="wl-av" style="background:linear-gradient(135deg,#ff6644,#cc3322)">S</div>
+                        </div>
+                        <span class="wl-proof">240+ already on the waitlist</span>
+                    </div>
+
+                    <!-- pill input form -->
+                    <div class="wl-pill-wrap">
+                        <div class="wl-pill">
+                            <svg class="wl-mail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+                            <input type="email" class="wl-pill-input" placeholder="your@email.com" id="emailInput" />
+                            <button class="wl-pill-btn" onclick="joinWaitlist()">
+                                Join free →
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="wl-note">No credit card required. Free during early access.</div>
+                    <div class="wl-success" id="successMsg">✓ You're on the list — we'll be in touch soon.</div>
+                </div>
+            </div>
         </div>
-        <div class="cta-title">Start knowing<br>your <em>market.</em></div>
-        <div class="email-form">
-            <input type="email" placeholder="your@email.com" id="emailInput" />
-            <button class="btn-primary" onclick="joinWaitlist()">Join →</button>
-        </div>
-        <div class="form-note">No card required. Free during early access.</div>
-        <div class="success-msg" id="successMsg">You are on the waitlist. We will be in touch.</div>
     </section>
 
     <footer>
